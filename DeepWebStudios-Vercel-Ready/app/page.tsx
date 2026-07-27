@@ -59,25 +59,35 @@ const packages = [
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+  const [formStatus, setFormStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
 
-  function sendInquiry(event: FormEvent<HTMLFormElement>) {
+  async function sendInquiry(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const form = new FormData(event.currentTarget);
-    const name = String(form.get("name") || "");
-    const business = String(form.get("business") || "");
-    const contact = String(form.get("contact") || "");
-    const need = String(form.get("need") || "");
-    const body = [
-      "Hi DeepWebStudios,", "", `I'm ${name} from ${business}.`,
-      `Contact: ${contact}`, `Project: ${need}`, "",
-      "I'd like to discuss a website project.",
-    ].join("\n");
+    const formElement = event.currentTarget;
+    const form = new FormData(formElement);
+    setFormStatus("sending");
 
-    setSubmitted(true);
-    window.location.href = `mailto:support@deepwebstudios.com?subject=${encodeURIComponent(
-      `Website inquiry from ${business || name}`,
-    )}&body=${encodeURIComponent(body)}`;
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.get("name"),
+          business: form.get("business"),
+          contact: form.get("contact"),
+          need: form.get("need"),
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Unable to send inquiry");
+      }
+
+      formElement.reset();
+      setFormStatus("success");
+    } catch {
+      setFormStatus("error");
+    }
   }
 
   const closeMenu = () => setMenuOpen(false);
@@ -86,7 +96,7 @@ export default function Home() {
     <main className="overflow-hidden bg-white text-[#1f2937]">
       <header className="fixed inset-x-0 top-0 z-50 flex h-20 items-center justify-between border-b border-[#0f172a]/10 bg-white/90 px-6 backdrop-blur-xl lg:grid lg:grid-cols-[1fr_auto_1fr] lg:px-12">
         <a className="brand-lockup" href="#top" onClick={closeMenu}>
-          <Image alt="" aria-hidden="true" height={34} priority src="/favicon.svg" width={34} />
+          <Image alt="" aria-hidden="true" height={34} priority src="/favicon.png" width={34} />
           <span className="anton text-[23px] tracking-[-.04em] text-[#0f172a]">
             DEEPWEBSTUDIOS<span className="text-[#2563eb]">.</span>
           </span>
@@ -103,7 +113,6 @@ export default function Home() {
               {label}
             </a>
           ))}
-          <a className="primary-cta mt-5 lg:hidden" href="#contact" onClick={closeMenu}>Start project <span>↗</span></a>
         </nav>
 
         <a className="primary-cta hidden justify-self-end lg:inline-flex" href="#contact">Start project <span>↗</span></a>
@@ -263,13 +272,17 @@ export default function Home() {
       <section className="contact-section" id="contact">
         <div className="contact-words" aria-hidden="true"><span>READY TO BUILD</span><span>READY TO LAUNCH</span></div>
         <div className="relative z-10 mx-auto grid max-w-[1312px] items-center gap-16 lg:grid-cols-[1fr_.8fr] lg:gap-28">
-          <div><p className="eyebrow !text-white/70">Start the conversation</p><h2 className="anton mt-6 text-[clamp(60px,7vw,102px)] leading-[.88] tracking-[-.025em] text-white">Let&apos;s build a site<br />worth trusting.</h2><p className="mt-9 max-w-xl text-lg leading-relaxed text-white/90">Tell us about your business. Your email app will open with a ready-to-send project brief.</p><a className="mt-6 inline-block border-b border-white/50 pb-1 font-black" href="mailto:support@deepwebstudios.com">support@deepwebstudios.com ↗</a></div>
+          <div><p className="eyebrow !text-white/70">Start the conversation</p><h2 className="anton mt-6 text-[clamp(60px,7vw,102px)] leading-[.88] tracking-[-.025em] text-white">Let&apos;s build a site<br />worth trusting.</h2><p className="mt-9 max-w-xl text-lg leading-relaxed text-white/90">Tell us about your business and submit the form. Your project brief will be delivered directly to our inbox.</p><a className="mt-6 inline-block border-b border-white/50 pb-1 font-black" href="mailto:support@deepwebstudios.com">support@deepwebstudios.com ↗</a></div>
           <form className="contact-form" onSubmit={sendInquiry}>
             <label><span>Your name</span><input name="name" placeholder="Enter your name" required /></label>
             <label><span>Business name</span><input name="business" placeholder="What do you run?" required /></label>
             <label><span>Email or WhatsApp</span><input name="contact" placeholder="How should we reach you?" required /></label>
             <label><span>What do you need?</span><select defaultValue="A new business website" name="need"><option>A new business website</option><option>A redesign of my current website</option><option>A landing page</option><option>Not sure yet</option></select></label>
-            <button type="submit">{submitted ? "Opening your email…" : "Send project brief"} <span>↗</span></button>
+            <button disabled={formStatus === "sending"} type="submit">{formStatus === "sending" ? "Sending…" : "Send project brief"} <span>↗</span></button>
+            <p aria-live="polite" className={`form-status ${formStatus}`}>
+              {formStatus === "success" && "Thank you! Your project brief has been sent."}
+              {formStatus === "error" && "We couldn’t send your message. Please try again."}
+            </p>
           </form>
         </div>
       </section>

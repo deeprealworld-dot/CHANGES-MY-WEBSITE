@@ -158,6 +158,10 @@ button,input,select { font:inherit; }
 .contact-form input:focus,.contact-form select:focus { border-color:var(--blue); box-shadow:0 0 0 3px rgba(37,99,235,.12); }
 .contact-form button { align-items:center; background:var(--ink); border:0; color:white; cursor:pointer; display:flex; font-family:"Anton",Impact,sans-serif; font-size:20px; justify-content:space-between; margin-top:6px; min-height:62px; padding:0 20px; text-transform:uppercase; transition:background .2s,transform .2s; }
 .contact-form button:hover { background:var(--blue); transform:translateY(-2px); }
+.contact-form button:disabled { cursor:wait; opacity:.7; transform:none; }
+.form-status { font-size:13px; font-weight:700; line-height:1.45; margin:0; min-height:19px; }
+.form-status.success { color:#0f766e; }
+.form-status.error { color:#b91c1c; }
 .footer-column { align-items:flex-start; display:flex; flex-direction:column; gap:15px; }
 .footer-column > span { color:rgba(255,255,255,.32); font-size:9px; font-weight:900; letter-spacing:.16em; margin-bottom:10px; text-transform:uppercase; }
 .footer-column a { font-size:14px; font-weight:700; transition:color .2s; }

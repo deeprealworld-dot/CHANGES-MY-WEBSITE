@@ -18,6 +18,20 @@ Vercel will run `npm install` and `npm run build` automatically.
 Open `app/page.tsx` and search for `TODO_DEMO_URL`. Replace each empty `url`
 value with the deployed demo URL.
 
+## Contact form (Resend)
+
+The inquiry form submits directly to `app/api/contact/route.ts`; it does not open
+the visitor's email app. Add these environment variables in Vercel:
+
+```env
+RESEND_API_KEY=re_your_resend_api_key
+RESEND_FROM_EMAIL=DeepWebStudios Website <website@send.deepwebstudios.com>
+CONTACT_TO_EMAIL=support@deepwebstudios.com
+```
+
+Use a verified Resend sender for `RESEND_FROM_EMAIL`. Keep the API key in Vercel
+only—never commit it to GitHub.
+
 ## Local development
 
 Requires Node.js 22.13 or newer.
