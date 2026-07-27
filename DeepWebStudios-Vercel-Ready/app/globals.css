@@ -11,6 +11,19 @@ button,input,select { font:inherit; }
 ::selection { background:rgba(37,99,235,.18); color:var(--navy); }
 .anton { font-family:"Anton",Impact,sans-serif; font-weight:400; text-transform:uppercase; }
 .eyebrow { color:var(--blue); font-size:10px; font-weight:900; letter-spacing:.2em; margin:0; text-transform:uppercase; }
+.brand-lockup { align-items:center; display:inline-flex; gap:10px; }
+.brand-lockup img { display:block; height:34px; object-fit:contain; width:34px; }
+.primary-cta {
+  align-items:center; background:var(--blue); box-shadow:5px 5px 0 var(--navy);
+  color:#fff !important; display:inline-flex; font-family:"Anton",Impact,sans-serif;
+  font-size:15px; gap:18px; justify-content:center; letter-spacing:.01em;
+  min-height:48px; padding:0 22px; text-transform:uppercase;
+  transition:background .25s ease,box-shadow .25s ease,transform .25s ease;
+}
+.primary-cta:hover { background:var(--teal); box-shadow:2px 2px 0 var(--navy); color:var(--navy) !important; transform:translate(3px,3px); }
+.primary-cta span { font-family:"Satoshi",Arial,sans-serif; font-weight:900; }
+.hero-cta { box-shadow:8px 8px 0 var(--navy); font-size:20px; min-height:68px; padding:0 32px; }
+.hero-cta:hover { box-shadow:4px 4px 0 var(--navy); transform:translate(4px,4px); }
 
 .hero-grid {
   background-image:linear-gradient(rgba(15,23,42,.1) 1px,transparent 1px),linear-gradient(90deg,rgba(15,23,42,.1) 1px,transparent 1px);
@@ -21,14 +34,15 @@ button,input,select { font:inherit; }
 @keyframes pulse { 50% { box-shadow:0 0 0 7px rgba(20,184,166,.15); } }
 .highlight { color:white; display:inline-block; isolation:isolate; padding:0 .08em; position:relative; }
 .highlight::before { background:var(--blue); content:""; inset:-.02em -.04em -.03em; position:absolute; transform:rotate(-2deg); z-index:-1; }
-.hard-button { box-shadow:8px 8px 0 var(--navy); transition:transform .25s ease,box-shadow .25s ease; }
-.hard-button:hover { box-shadow:4px 4px 0 var(--navy); transform:translate(4px,4px); }
-.ticker-track { animation:ticker 32s linear infinite; display:flex; width:max-content; will-change:transform; }
+.ticker-track { animation:ticker-scroll 18s linear infinite; display:flex; transform:translate3d(0,0,0); width:max-content; will-change:transform; }
 .ticker:hover .ticker-track { animation-play-state:paused; }
-.ticker-group { align-items:center; display:flex; flex-shrink:0; }
+.ticker-group { align-items:center; display:flex; flex:none; min-width:max-content; }
 .ticker-item { align-items:center; display:flex; flex-shrink:0; gap:3rem; padding-right:3rem; white-space:nowrap; }
 .ticker-track i { color:var(--teal); font-family:"Satoshi",sans-serif; font-size:12px; }
-@keyframes ticker { to { transform:translateX(-50%); } }
+@keyframes ticker-scroll {
+  from { transform:translate3d(0,0,0); }
+  to { transform:translate3d(-50%,0,0); }
+}
 
 .section-heading { align-items:end; display:grid; gap:60px; grid-template-columns:1.4fr .6fr; margin-bottom:70px; }
 .section-heading h2 { color:var(--ink); font-family:"Anton",Impact,sans-serif; font-size:clamp(54px,6vw,88px); font-weight:400; letter-spacing:-.025em; line-height:.92; margin:22px 0 0; text-transform:uppercase; }
@@ -72,7 +86,9 @@ button,input,select { font:inherit; }
 .design-card { align-items:center; background:var(--mist); display:grid; gap:34px; grid-column:span 2; grid-template-columns:.85fr 1.15fr; }
 .micro-label { color:var(--blue); font-size:9px; font-weight:900; letter-spacing:.18em; text-transform:uppercase; }
 .tag { background:white; border:1px solid rgba(15,23,42,.1); font-size:9px; font-weight:900; letter-spacing:.1em; padding:8px 10px; text-transform:uppercase; }
-.service-icon { align-items:center; border:1px solid rgba(15,23,42,.1); color:var(--blue); display:flex; font-size:30px; height:64px; justify-content:center; margin-top:48px; width:64px; }
+.service-icon { align-items:center; border:1px solid rgba(15,23,42,.1); color:var(--blue); display:flex; height:64px; justify-content:center; margin-top:48px; width:64px; }
+.service-icon svg { height:30px; width:30px; }
+.service-icon-blue { background:var(--blue); border-color:var(--blue); color:#fff; }
 .inquiry-card { align-items:center; background:rgba(20,184,166,.08); border-color:rgba(20,184,166,.25); display:grid; gap:55px; grid-column:span 2; grid-template-columns:1fr 1fr; }
 .message-stack { display:grid; gap:14px; }
 .message-stack > div { align-items:center; background:white; border:1px solid rgba(20,184,166,.22); box-shadow:0 18px 35px -28px rgba(10,15,28,.4); display:flex; gap:15px; padding:17px; }

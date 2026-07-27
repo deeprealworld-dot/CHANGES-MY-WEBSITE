@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import Image from "next/image";
 
 type Project = {
   title: string;
@@ -14,31 +15,31 @@ const projects: Project[] = [
     title: "Royal Classes",
     type: "Education / Multi-page experience",
     visual: "classes",
-    url: "", // TODO_DEMO_URL: Add the deployed Royal Classes URL.
+    url: "https://royal-classes-demo.vercel.app/", // TODO_DEMO_URL: Add the deployed Royal Classes URL.
   },
   {
     title: "The Fitness Square",
     type: "Gym / Lead generation",
     visual: "gym",
-    url: "https://modern-gym-website-design-sandy.vercel.app",
+    url: "https://modern-gym-website-design-d6swxjjgk.vercel.app/",
   },
   {
     title: "Mumbai Care Clinic",
     type: "Clinic / Appointment journey",
     visual: "clinic",
-    url: "", // TODO_DEMO_URL: Add the deployed clinic demo URL.
+    url: "https://doctors-website-demo.vercel.app/", // TODO_DEMO_URL: Add the deployed clinic demo URL.
   },
   {
     title: "Restaurant Demo",
     type: "Restaurant / Reservations and discovery",
     visual: "restaurant",
-    url: "", // TODO_DEMO_URL: Add the deployed restaurant demo URL.
+    url: "https://sagaars-resturant-lilac.vercel.app/", // TODO_DEMO_URL: Add the deployed restaurant demo URL.
   },
   {
     title: "Plus Fitness 24/7 Andheri",
     type: "Fitness / Local branch experience",
     visual: "plus",
-    url: "", // TODO_DEMO_URL: Add the deployed Plus Fitness URL.
+    url: "https://plus-fitness-24-7-andheri.vercel.app/", // TODO_DEMO_URL: Add the deployed Plus Fitness URL.
   },
 ];
 
@@ -51,9 +52,9 @@ const process = [
 ];
 
 const packages = [
-  ["Starter", "For solo professionals", "₹19,999", ["Single-page custom build", "WhatsApp-ready lead flow", "Google Maps integration"]],
-  ["Growth", "For growing local businesses", "₹34,999", ["Up to five custom pages", "Lead capture system", "Local SEO foundations", "Content editing setup"]],
-  ["Pro", "For ambitious institutions", "₹59,999", ["Custom multi-page system", "Advanced content structure", "Conversion-led user journeys", "Post-launch support"]],
+  ["Starter", "For solo professionals", "₹5,999", ["Single-page custom build", "WhatsApp-ready lead flow", "Google Maps integration"]],
+  ["Growth", "For growing local businesses", "₹9,999", ["Up to five custom pages", "Lead capture system", "Local SEO foundations", "Content editing setup"]],
+  ["Pro", "For ambitious institutions", "₹19,999", ["Custom multi-page system", "Advanced content structure", "Conversion-led user journeys", "Post-launch support"]],
 ];
 
 export default function Home() {
@@ -74,7 +75,7 @@ export default function Home() {
     ].join("\n");
 
     setSubmitted(true);
-    window.location.href = `mailto:hello@deepwebstudios.com?subject=${encodeURIComponent(
+    window.location.href = `mailto:support@deepwebstudios.com?subject=${encodeURIComponent(
       `Website inquiry from ${business || name}`,
     )}&body=${encodeURIComponent(body)}`;
   }
@@ -84,8 +85,11 @@ export default function Home() {
   return (
     <main className="overflow-hidden bg-white text-[#1f2937]">
       <header className="fixed inset-x-0 top-0 z-50 flex h-20 items-center justify-between border-b border-[#0f172a]/10 bg-white/90 px-6 backdrop-blur-xl lg:grid lg:grid-cols-[1fr_auto_1fr] lg:px-12">
-        <a className="anton text-[23px] tracking-[-.04em] text-[#0f172a]" href="#top" onClick={closeMenu}>
-          DEEPWEBSTUDIOS<span className="text-[#2563eb]">.</span>
+        <a className="brand-lockup" href="#top" onClick={closeMenu}>
+          <Image alt="" aria-hidden="true" height={34} priority src="/favicon.svg" width={34} />
+          <span className="anton text-[23px] tracking-[-.04em] text-[#0f172a]">
+            DEEPWEBSTUDIOS<span className="text-[#2563eb]">.</span>
+          </span>
         </a>
 
         <nav
@@ -99,10 +103,10 @@ export default function Home() {
               {label}
             </a>
           ))}
-          <a className="anton mt-5 bg-[#2563eb] px-5 py-4 text-center text-lg text-white lg:hidden" href="#contact" onClick={closeMenu}>Start project</a>
+          <a className="primary-cta mt-5 lg:hidden" href="#contact" onClick={closeMenu}>Start project <span>↗</span></a>
         </nav>
 
-        <a className="anton hidden justify-self-end rounded-full bg-[#0f172a] px-6 py-3.5 text-sm text-white transition hover:-translate-y-0.5 hover:bg-[#2563eb] lg:block" href="#contact">Start project</a>
+        <a className="primary-cta hidden justify-self-end lg:inline-flex" href="#contact">Start project <span>↗</span></a>
         <button aria-expanded={menuOpen} aria-label={menuOpen ? "Close menu" : "Open menu"} className="flex h-11 w-11 flex-col items-center justify-center gap-1.5 bg-[#0f172a] lg:hidden" onClick={() => setMenuOpen((open) => !open)} type="button">
           <span className={`h-0.5 w-5 bg-white transition ${menuOpen ? "translate-y-1 rotate-45" : ""}`} />
           <span className={`h-0.5 w-5 bg-white transition ${menuOpen ? "-translate-y-1 -rotate-45" : ""}`} />
@@ -123,7 +127,7 @@ export default function Home() {
             stand apart, and turn more visitors into real inquiries.
           </p>
           <div className="mt-11 flex flex-col items-center justify-center gap-7 sm:flex-row">
-            <a className="anton hard-button inline-flex min-h-17 items-center gap-6 bg-[#2563eb] px-8 text-xl text-white" href="#contact">Start a project <span className="font-sans">↗</span></a>
+            <a className="primary-cta hero-cta" href="#contact">Start a project <span>↗</span></a>
             <a className="anton border-b-2 border-[#0f172a] py-2 text-xl text-[#0f172a] transition hover:border-[#2563eb] hover:text-[#2563eb]" href="#work">View our work <span className="font-sans">↓</span></a>
           </div>
         </div>
@@ -210,8 +214,20 @@ export default function Home() {
               <div className="browser-body"><aside><b>D.</b><i /><i /><i /></aside><div><small>LOCAL BUSINESS / DIGITAL STUDIO</small><strong>STAND OUT<br /><em>ONLINE.</em></strong><span>BUILD IT BETTER →</span><mark>YOUR BRAND ↖</mark></div><section><small>TYPE</small><b>Anton</b><small>COLOUR</small><i>#2563EB</i><small>ALIGN</small><span>≡ ≣ ≡</span></section></div>
             </div>
           </article>
-          <article className="bento-card bg-[#0f172a] text-white"><span className="micro-label text-white/50">02 / Responsive</span><div className="service-icon bg-[#2563eb] text-white">↕</div><h3 className="!text-white">Mobile-first</h3><p className="!text-white/55">Designed around how local customers browse, compare, and contact businesses from their phones.</p></article>
-          <article className="bento-card bg-white"><span className="micro-label">03 / Discovery</span><div className="service-icon">⌕</div><h3>Local SEO</h3><p>Clean structure, useful metadata, and location-ready pages create a strong foundation for discovery.</p></article>
+          <article className="bento-card bg-[#0f172a] text-white">
+            <span className="micro-label text-white/50">02 / Responsive</span>
+            <div className="service-icon service-icon-blue" aria-hidden="true">
+              <svg fill="none" viewBox="0 0 24 24"><rect height="19" rx="2.5" stroke="currentColor" strokeWidth="2" width="12" x="6" y="2.5" /><path d="M9.5 18.5h5" stroke="currentColor" strokeLinecap="round" strokeWidth="2" /></svg>
+            </div>
+            <h3 className="!text-white">Mobile-first</h3><p className="!text-white/55">Designed around how local customers browse, compare, and contact businesses from their phones.</p>
+          </article>
+          <article className="bento-card bg-white">
+            <span className="micro-label">03 / Discovery</span>
+            <div className="service-icon" aria-hidden="true">
+              <svg fill="none" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5" stroke="currentColor" strokeWidth="2" /><path d="m15.5 15.5 5 5" stroke="currentColor" strokeLinecap="round" strokeWidth="2" /></svg>
+            </div>
+            <h3>Local SEO</h3><p>Clean structure, useful metadata, and location-ready pages create a strong foundation for discovery.</p>
+          </article>
           <article className="bento-card inquiry-card"><div><span className="micro-label">04 / Low-friction leads</span><h3>Inquiry-ready journeys</h3><p>Clear contact paths make it easy for visitors to move from interest to a genuine business conversation.</p></div><div className="message-stack"><div><span>●</span><p><small>NEW INQUIRY</small><b>I&apos;d like to know more.</b></p></div><div><span>↗</span><p><small>QUICK RESPONSE</small><b>Conversation started.</b></p></div></div></article>
         </div>
       </section>
@@ -247,7 +263,7 @@ export default function Home() {
       <section className="contact-section" id="contact">
         <div className="contact-words" aria-hidden="true"><span>READY TO BUILD</span><span>READY TO LAUNCH</span></div>
         <div className="relative z-10 mx-auto grid max-w-[1312px] items-center gap-16 lg:grid-cols-[1fr_.8fr] lg:gap-28">
-          <div><p className="eyebrow !text-white/70">Start the conversation</p><h2 className="anton mt-6 text-[clamp(60px,7vw,102px)] leading-[.88] tracking-[-.025em] text-white">Let&apos;s build a site<br />worth trusting.</h2><p className="mt-9 max-w-xl text-lg leading-relaxed text-white/90">Tell us about your business. Your email app will open with a ready-to-send project brief.</p><a className="mt-6 inline-block border-b border-white/50 pb-1 font-black" href="mailto:hello@deepwebstudios.com">hello@deepwebstudios.com ↗</a></div>
+          <div><p className="eyebrow !text-white/70">Start the conversation</p><h2 className="anton mt-6 text-[clamp(60px,7vw,102px)] leading-[.88] tracking-[-.025em] text-white">Let&apos;s build a site<br />worth trusting.</h2><p className="mt-9 max-w-xl text-lg leading-relaxed text-white/90">Tell us about your business. Your email app will open with a ready-to-send project brief.</p><a className="mt-6 inline-block border-b border-white/50 pb-1 font-black" href="mailto:support@deepwebstudios.com">support@deepwebstudios.com ↗</a></div>
           <form className="contact-form" onSubmit={sendInquiry}>
             <label><span>Your name</span><input name="name" placeholder="Enter your name" required /></label>
             <label><span>Business name</span><input name="business" placeholder="What do you run?" required /></label>
@@ -262,7 +278,7 @@ export default function Home() {
         <div className="mx-auto grid max-w-[1440px] gap-14 px-6 py-20 md:grid-cols-[2fr_.7fr_.8fr] lg:px-12 lg:py-24">
           <div><a className="anton text-3xl" href="#top">DEEPWEBSTUDIOS<span className="text-[#2563eb]">.</span></a><p className="mt-7 max-w-md text-lg leading-relaxed text-white/40">Distinctive websites for Mumbai&apos;s ambitious local businesses.</p></div>
           <div className="footer-column"><span>Explore</span><a href="#work">Work</a><a href="#services">Services</a><a href="#process">Process</a><a href="#pricing">Pricing</a></div>
-          <div className="footer-column"><span>Contact</span><a href="mailto:hello@deepwebstudios.com">Email the studio</a><p>Mumbai, India</p></div>
+          <div className="footer-column"><span>Contact</span><a href="mailto:support@deepwebstudios.com">Email the studio</a><p>Mumbai, India</p></div>
         </div>
         <div className="mx-auto flex max-w-[1440px] justify-between border-t border-white/10 px-6 py-8 text-[9px] font-black uppercase tracking-widest text-white/30 lg:px-12"><span>© {new Date().getFullYear()} DeepWebStudios</span><a href="#top">Back to top ↑</a></div>
       </footer>
