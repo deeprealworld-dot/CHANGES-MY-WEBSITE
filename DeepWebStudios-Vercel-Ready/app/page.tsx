@@ -135,8 +135,8 @@ export default function Home() {
           ))}
         </nav>
 
-        <a className="primary-cta hidden justify-self-end lg:inline-flex" href="#contact">Start project <span>↗</span></a>
-        <button aria-expanded={menuOpen} aria-label={menuOpen ? "Close menu" : "Open menu"} className="flex h-11 w-11 flex-col items-center justify-center gap-1.5 bg-[#0f172a] lg:hidden" onClick={() => setMenuOpen((open) => !open)} type="button">
+        <a className="primary-cta header-cta justify-self-end" href="#contact">Start project <span>↗</span></a>
+        <button aria-expanded={menuOpen} aria-label={menuOpen ? "Close menu" : "Open menu"} className="flex h-11 w-11 shrink-0 flex-col items-center justify-center gap-1.5 bg-[#0f172a] lg:hidden" onClick={() => setMenuOpen((open) => !open)} type="button">
           <span className={`h-0.5 w-5 bg-white transition ${menuOpen ? "translate-y-1 rotate-45" : ""}`} />
           <span className={`h-0.5 w-5 bg-white transition ${menuOpen ? "-translate-y-1 -rotate-45" : ""}`} />
         </button>

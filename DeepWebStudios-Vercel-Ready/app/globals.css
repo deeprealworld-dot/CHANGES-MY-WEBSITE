@@ -22,6 +22,7 @@ button,input,select { font:inherit; }
 }
 .primary-cta:hover { background:var(--teal); box-shadow:2px 2px 0 var(--navy); color:var(--navy) !important; transform:translate(3px,3px); }
 .primary-cta span { font-family:"Satoshi",Arial,sans-serif; font-weight:900; }
+.header-cta { display:none; }
 .hero-cta { box-shadow:8px 8px 0 var(--navy); font-size:20px; min-height:68px; padding:0 32px; }
 .hero-cta:hover { box-shadow:4px 4px 0 var(--navy); transform:translate(4px,4px); }
 
@@ -35,7 +36,6 @@ button,input,select { font:inherit; }
 .highlight { color:white; display:inline-block; isolation:isolate; padding:0 .08em; position:relative; }
 .highlight::before { background:var(--blue); content:""; inset:-.02em -.04em -.03em; position:absolute; transform:rotate(-2deg); z-index:-1; }
 .ticker-track { animation:ticker-scroll 18s linear infinite; display:flex; transform:translate3d(0,0,0); width:max-content; will-change:transform; }
-.ticker:hover .ticker-track { animation-play-state:paused; }
 .ticker-group { align-items:center; display:flex; flex:none; min-width:max-content; }
 .ticker-item { align-items:center; display:flex; flex-shrink:0; gap:3rem; padding-right:3rem; white-space:nowrap; }
 .ticker-track i { color:var(--teal); font-family:"Satoshi",sans-serif; font-size:12px; }
@@ -74,7 +74,7 @@ button,input,select { font:inherit; }
 .studio-label { color:var(--teal); }
 .studio strong em { color:var(--blue); font-style:normal; }
 .studio-grid-mark { color:rgba(37,99,235,.7); font-family:"Anton",Impact,sans-serif; font-size:250px; line-height:1; position:absolute; right:-10px; top:45px; transform:rotate(6deg); }
-.demo-link { border-bottom:1px solid currentColor; color:var(--blue); font-size:9px; font-weight:900; letter-spacing:.12em; padding-bottom:3px; text-transform:uppercase; transition:color .2s; }
+.demo-link { align-items:center; border-bottom:1px solid currentColor; color:var(--blue); display:inline-flex; font-size:9px; font-weight:900; letter-spacing:.12em; min-height:44px; text-transform:uppercase; transition:color .2s; }
 .demo-link:hover { color:var(--teal); }
 .demo-link.pending { border:0; color:#94a3b8; cursor:default; }
 
@@ -170,6 +170,7 @@ button,input,select { font:inherit; }
 .footer-column p { color:rgba(255,255,255,.45); font-size:14px; margin:0; }
 
 @media (min-width:1024px) {
+  .header-cta { display:inline-flex; }
   .price-card { border-bottom:0; border-right:1px solid rgba(15,23,42,.1); }
   .price-card:last-child { border-right:0; }
   .price-card.featured { transform:scale(1.035); z-index:2; }
@@ -204,4 +205,5 @@ button,input,select { font:inherit; }
 @media (prefers-reduced-motion:reduce) {
   html { scroll-behavior:auto; }
   *,*::before,*::after { animation-duration:.01ms!important; animation-iteration-count:1!important; transition-duration:.01ms!important; }
+  .ticker-track { animation-duration:36s!important; animation-iteration-count:infinite!important; }
 }
