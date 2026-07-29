@@ -27,10 +27,19 @@ the visitor's email app. Add these environment variables in Vercel:
 RESEND_API_KEY=re_your_resend_api_key
 RESEND_FROM_EMAIL=DeepWebStudios Website <website@send.deepwebstudios.com>
 CONTACT_TO_EMAIL=support@deepwebstudios.com
+NEXT_PUBLIC_TURNSTILE_SITE_KEY=your_turnstile_site_key
+TURNSTILE_SECRET_KEY=your_turnstile_secret_key
+UPSTASH_REDIS_REST_URL=https://your-database.upstash.io
+UPSTASH_REDIS_REST_TOKEN=your_upstash_rest_token
 ```
 
 Use a verified Resend sender for `RESEND_FROM_EMAIL`. Keep the API key in Vercel
 only—never commit it to GitHub.
+
+The endpoint validates all fields, rejects bot honeypot submissions, verifies
+Cloudflare Turnstile on the server, and limits each IP address to five attempts
+per ten minutes using Upstash Redis. Add your production domain to the
+Turnstile widget's allowed hostnames before deploying.
 
 ## Local development
 

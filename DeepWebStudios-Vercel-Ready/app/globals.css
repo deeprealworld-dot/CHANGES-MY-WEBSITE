@@ -159,6 +159,7 @@ button,input,select { font:inherit; }
 .contact-form button { align-items:center; background:var(--ink); border:0; color:white; cursor:pointer; display:flex; font-family:"Anton",Impact,sans-serif; font-size:20px; justify-content:space-between; margin-top:6px; min-height:62px; padding:0 20px; text-transform:uppercase; transition:background .2s,transform .2s; }
 .contact-form button:hover { background:var(--blue); transform:translateY(-2px); }
 .contact-form button:disabled { cursor:wait; opacity:.7; transform:none; }
+.contact-form .form-honeypot { height:0; left:-10000px; overflow:hidden; position:absolute; width:0; }
 .form-status { font-size:13px; font-weight:700; line-height:1.45; margin:0; min-height:19px; }
 .form-status.success { color:#0f766e; }
 .form-status.error { color:#b91c1c; }

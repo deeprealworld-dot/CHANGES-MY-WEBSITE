@@ -1,7 +1,8 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useRef, useState } from "react";
 import Image from "next/image";
+import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
 
 type Project = {
   title: string;
@@ -45,7 +46,7 @@ const projects: Project[] = [
 
 const tickerItems = ["Restaurants", "Clinics", "Gyms", "Salons", "Coaching classes", "Consultants"];
 
-const process = [
+const processSteps = [
   ["01", "Brief", "We learn your offer, audience, local competition, and exactly what the website must achieve."],
   ["02", "Build", "Strategy becomes a custom responsive experience, complete with clear actions and polished details."],
   ["03", "Launch", "We test, connect your domain, and hand over a website ready to generate genuine inquiries."],
@@ -60,12 +61,21 @@ const packages = [
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [formStatus, setFormStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
+  const [formMessage, setFormMessage] = useState("");
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const turnstileRef = useRef<TurnstileInstance>(null);
 
   async function sendInquiry(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const formElement = event.currentTarget;
     const form = new FormData(formElement);
+    if (!turnstileToken) {
+      setFormMessage("Please complete the security check.");
+      setFormStatus("error");
+      return;
+    }
     setFormStatus("sending");
+    setFormMessage("");
 
     try {
       const response = await fetch("/api/contact", {
@@ -76,17 +86,26 @@ export default function Home() {
           business: form.get("business"),
           contact: form.get("contact"),
           need: form.get("need"),
+          website: form.get("website"),
+          turnstileToken,
         }),
       });
 
       if (!response.ok) {
-        throw new Error("Unable to send inquiry");
+        const result = (await response.json().catch(() => ({}))) as { error?: string };
+        throw new Error(result.error || "Unable to send inquiry.");
       }
 
       formElement.reset();
+      setTurnstileToken("");
+      turnstileRef.current?.reset();
       setFormStatus("success");
-    } catch {
+      setFormMessage("Thank you! Your project brief has been sent.");
+    } catch (error) {
+      setTurnstileToken("");
+      turnstileRef.current?.reset();
       setFormStatus("error");
+      setFormMessage(error instanceof Error ? error.message : "We couldn’t send your message. Please try again.");
     }
   }
 
@@ -243,7 +262,7 @@ export default function Home() {
 
       <section className="grid gap-16 bg-[#f8fafc] px-6 py-28 lg:grid-cols-[.75fr_1.25fr] lg:gap-28 lg:px-12 lg:py-40" id="process">
         <div className="h-fit lg:sticky lg:top-36"><p className="eyebrow">Our methodology</p><h2 className="anton mt-6 text-[clamp(72px,8vw,112px)] leading-[.86] tracking-[-.03em] text-[#0f172a]">How it<br />works.</h2><p className="mt-8 max-w-xs leading-relaxed text-[#64748b]">One clear process. No unnecessary complexity.</p></div>
-        <div>{process.map(([number, title, copy]) => <article className="process-step" key={number}><span>{number}</span><div><h3>{title}</h3><p>{copy}</p></div></article>)}</div>
+        <div>{processSteps.map(([number, title, copy]) => <article className="process-step" key={number}><span>{number}</span><div><h3>{title}</h3><p>{copy}</p></div></article>)}</div>
       </section>
 
       <section className="mx-auto max-w-[1440px] px-6 py-28 lg:px-12 lg:py-40" id="pricing">
@@ -278,10 +297,18 @@ export default function Home() {
             <label><span>Business name</span><input name="business" placeholder="What do you run?" required /></label>
             <label><span>Email or WhatsApp</span><input name="contact" placeholder="How should we reach you?" required /></label>
             <label><span>What do you need?</span><select defaultValue="A new business website" name="need"><option>A new business website</option><option>A redesign of my current website</option><option>A landing page</option><option>Not sure yet</option></select></label>
-            <button disabled={formStatus === "sending"} type="submit">{formStatus === "sending" ? "Sending…" : "Send project brief"} <span>↗</span></button>
+            <label className="form-honeypot" aria-hidden="true"><span>Website</span><input autoComplete="off" name="website" tabIndex={-1} /></label>
+            <Turnstile
+              onError={() => { setTurnstileToken(""); setFormMessage("Security check failed to load. Please refresh."); setFormStatus("error"); }}
+              onExpire={() => setTurnstileToken("")}
+              onSuccess={(token) => { setTurnstileToken(token); setFormMessage(""); if (formStatus === "error") setFormStatus("idle"); }}
+              options={{ action: "contact", appearance: "interaction-only", size: "flexible", theme: "light" }}
+              ref={turnstileRef}
+              siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? ""}
+            />
+            <button disabled={formStatus === "sending" || !turnstileToken} type="submit">{formStatus === "sending" ? "Sending…" : "Send project brief"} <span>↗</span></button>
             <p aria-live="polite" className={`form-status ${formStatus}`}>
-              {formStatus === "success" && "Thank you! Your project brief has been sent."}
-              {formStatus === "error" && "We couldn’t send your message. Please try again."}
+              {formMessage}
             </p>
           </form>
         </div>
