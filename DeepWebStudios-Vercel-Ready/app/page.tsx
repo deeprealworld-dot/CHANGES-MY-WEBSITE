@@ -59,6 +59,7 @@ const packages = [
 ];
 
 export default function Home() {
+  const turnstileSiteKey = (process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "").trim();
   const [menuOpen, setMenuOpen] = useState(false);
   const [formStatus, setFormStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
   const [formMessage, setFormMessage] = useState("");
@@ -298,14 +299,38 @@ export default function Home() {
             <label><span>Email or WhatsApp</span><input name="contact" placeholder="How should we reach you?" required /></label>
             <label><span>What do you need?</span><select defaultValue="A new business website" name="need"><option>A new business website</option><option>A redesign of my current website</option><option>A landing page</option><option>Not sure yet</option></select></label>
             <label className="form-honeypot" aria-hidden="true"><span>Website</span><input autoComplete="off" name="website" tabIndex={-1} /></label>
-            <Turnstile
-              onError={() => { setTurnstileToken(""); setFormMessage("Security check failed to load. Please refresh."); setFormStatus("error"); }}
-              onExpire={() => setTurnstileToken("")}
-              onSuccess={(token) => { setTurnstileToken(token); setFormMessage(""); if (formStatus === "error") setFormStatus("idle"); }}
-              options={{ action: "contact", appearance: "interaction-only", size: "flexible", theme: "light" }}
-              ref={turnstileRef}
-              siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? ""}
-            />
+            {turnstileSiteKey ? (
+              <Turnstile
+                onError={(code) => {
+                  setTurnstileToken("");
+                  setFormMessage(`Security check failed (${code}). Please refresh.`);
+                  setFormStatus("error");
+                }}
+                onExpire={() => setTurnstileToken("")}
+                onSuccess={(token) => {
+                  setTurnstileToken(token);
+                  setFormMessage("");
+                  setFormStatus("idle");
+                }}
+                onTimeout={() => {
+                  setTurnstileToken("");
+                  setFormMessage("Security check timed out. Please try again.");
+                  setFormStatus("error");
+                }}
+                onUnsupported={() => {
+                  setTurnstileToken("");
+                  setFormMessage("This browser cannot run the security check. Please try another browser.");
+                  setFormStatus("error");
+                }}
+                options={{ action: "contact", appearance: "always", size: "flexible", theme: "light" }}
+                ref={turnstileRef}
+                siteKey={turnstileSiteKey}
+              />
+            ) : (
+              <p className="form-status error">
+                Security check is not configured. Add NEXT_PUBLIC_TURNSTILE_SITE_KEY in Vercel and redeploy.
+              </p>
+            )}
             <button disabled={formStatus === "sending" || !turnstileToken} type="submit">{formStatus === "sending" ? "Sending…" : "Send project brief"} <span>↗</span></button>
             <p aria-live="polite" className={`form-status ${formStatus}`}>
               {formMessage}
