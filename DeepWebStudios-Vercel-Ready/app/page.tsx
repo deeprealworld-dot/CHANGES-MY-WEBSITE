@@ -3,7 +3,6 @@
 import { FormEvent, useRef, useState } from "react";
 import Image from "next/image";
 import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
-import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
 
 type Project = {
   title: string;
@@ -136,12 +135,7 @@ export default function Home() {
           ))}
         </nav>
 
-        <InteractiveHoverButton
-          className="hidden h-12 w-40 justify-self-end border-[#0f172a]/15 text-sm uppercase tracking-[.08em] lg:block"
-          onClick={() => document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" })}
-          text="Start project"
-          type="button"
-        />
+        <a className="primary-cta hidden justify-self-end lg:inline-flex" href="#contact">Start project <span>↗</span></a>
         <button aria-expanded={menuOpen} aria-label={menuOpen ? "Close menu" : "Open menu"} className="flex h-11 w-11 flex-col items-center justify-center gap-1.5 bg-[#0f172a] lg:hidden" onClick={() => setMenuOpen((open) => !open)} type="button">
           <span className={`h-0.5 w-5 bg-white transition ${menuOpen ? "translate-y-1 rotate-45" : ""}`} />
           <span className={`h-0.5 w-5 bg-white transition ${menuOpen ? "-translate-y-1 -rotate-45" : ""}`} />

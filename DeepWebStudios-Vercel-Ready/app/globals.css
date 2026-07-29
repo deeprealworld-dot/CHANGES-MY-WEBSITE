@@ -2,23 +2,7 @@
 @import url("https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&display=swap");
 @import "tailwindcss";
 
-:root {
-  --navy:#0a0f1c;
-  --ink:#0f172a;
-  --blue:#2563eb;
-  --teal:#14b8a6;
-  --mist:#f8fafc;
-  --background:#ffffff;
-  --foreground:#0f172a;
-  --primary:#2563eb;
-  --primary-foreground:#ffffff;
-}
-@theme inline {
-  --color-background:var(--background);
-  --color-foreground:var(--foreground);
-  --color-primary:var(--primary);
-  --color-primary-foreground:var(--primary-foreground);
-}
+:root { --navy:#0a0f1c; --ink:#0f172a; --blue:#2563eb; --teal:#14b8a6; --mist:#f8fafc; }
 * { box-sizing:border-box; }
 html { scroll-behavior:smooth; scroll-padding-top:80px; }
 body { margin:0; background:white; color:#1f2937; font-family:"Satoshi",Arial,sans-serif; -webkit-font-smoothing:antialiased; }
