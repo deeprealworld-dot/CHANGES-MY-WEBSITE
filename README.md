@@ -8,8 +8,8 @@ Vercel-ready Next.js website for DeepWebStudios.
 2. Upload the extracted folder to GitHub.
 3. In Vercel, select **Add New → Project** and import the repository.
 4. Keep the detected framework as **Next.js**.
-5. Set **Root Directory** to `DeepWebStudios-Vercel-Ready` (the app lives in this
-   folder, not at the top of the repository). Leave the build settings at their defaults.
+5. Leave the Root Directory empty (the app is at the top of the repository) and the
+   build settings at their defaults.
 6. Select **Deploy**.
 
 Vercel will run `npm install` and `npm run build` automatically.
