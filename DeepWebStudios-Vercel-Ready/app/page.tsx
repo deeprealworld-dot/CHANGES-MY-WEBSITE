@@ -63,6 +63,8 @@ export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [formStatus, setFormStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
   const [formMessage, setFormMessage] = useState("");
+  // Kept apart from formMessage so a passing security check only clears its own error.
+  const [securityMessage, setSecurityMessage] = useState("");
   const [turnstileToken, setTurnstileToken] = useState("");
   const turnstileRef = useRef<TurnstileInstance>(null);
 
@@ -125,7 +127,7 @@ export default function Home() {
         <nav
           aria-label="Primary navigation"
           className={`absolute left-0 right-0 top-20 flex flex-col border-b border-[#0f172a]/10 bg-white p-6 transition-all lg:static lg:flex lg:flex-row lg:items-center lg:gap-10 lg:border-0 lg:bg-transparent lg:p-0 ${
-            menuOpen ? "translate-y-0 opacity-100" : "pointer-events-none -translate-y-3 opacity-0 lg:pointer-events-auto lg:translate-y-0 lg:opacity-100"
+            menuOpen ? "translate-y-0 opacity-100" : "pointer-events-none -translate-y-3 opacity-0 max-lg:invisible lg:pointer-events-auto lg:translate-y-0 lg:opacity-100"
           }`}
         >
           {[["Work", "#work"], ["Services", "#services"], ["Process", "#process"], ["Pricing", "#pricing"]].map(([label, href]) => (
@@ -294,33 +296,29 @@ export default function Home() {
         <div className="relative z-10 mx-auto grid max-w-[1312px] items-center gap-16 lg:grid-cols-[1fr_.8fr] lg:gap-28">
           <div><p className="eyebrow !text-white/70">Start the conversation</p><h2 className="anton mt-6 text-[clamp(60px,7vw,102px)] leading-[.88] tracking-[-.025em] text-white">Let&apos;s build a site<br />worth trusting.</h2><p className="mt-9 max-w-xl text-lg leading-relaxed text-white/90">Tell us about your business and submit the form. Your project brief will be delivered directly to our inbox.</p><a className="mt-6 inline-block border-b border-white/50 pb-1 font-black" href="mailto:support@deepwebstudios.com">support@deepwebstudios.com ↗</a></div>
           <form className="contact-form" onSubmit={sendInquiry}>
-            <label><span>Your name</span><input name="name" placeholder="Enter your name" required /></label>
-            <label><span>Business name</span><input name="business" placeholder="What do you run?" required /></label>
-            <label><span>Email or WhatsApp</span><input name="contact" placeholder="How should we reach you?" required /></label>
+            <label><span>Your name</span><input maxLength={80} minLength={2} name="name" placeholder="Enter your name" required /></label>
+            <label><span>Business name</span><input maxLength={120} minLength={2} name="business" placeholder="What do you run?" required /></label>
+            <label><span>Email or WhatsApp</span><input maxLength={120} minLength={6} name="contact" placeholder="How should we reach you?" required /></label>
             <label><span>What do you need?</span><select defaultValue="A new business website" name="need"><option>A new business website</option><option>A redesign of my current website</option><option>A landing page</option><option>Not sure yet</option></select></label>
             <label className="form-honeypot" aria-hidden="true"><span>Website</span><input autoComplete="off" name="website" tabIndex={-1} /></label>
             {turnstileSiteKey ? (
               <Turnstile
                 onError={(code) => {
                   setTurnstileToken("");
-                  setFormMessage(`Security check failed (${code}). Please refresh.`);
-                  setFormStatus("error");
+                  setSecurityMessage(`Security check failed (${code}). Please refresh.`);
                 }}
                 onExpire={() => setTurnstileToken("")}
                 onSuccess={(token) => {
                   setTurnstileToken(token);
-                  setFormMessage("");
-                  setFormStatus("idle");
+                  setSecurityMessage("");
                 }}
                 onTimeout={() => {
                   setTurnstileToken("");
-                  setFormMessage("Security check timed out. Please try again.");
-                  setFormStatus("error");
+                  setSecurityMessage("Security check timed out. Please try again.");
                 }}
                 onUnsupported={() => {
                   setTurnstileToken("");
-                  setFormMessage("This browser cannot run the security check. Please try another browser.");
-                  setFormStatus("error");
+                  setSecurityMessage("This browser cannot run the security check. Please try another browser.");
                 }}
                 options={{ action: "contact", appearance: "always", size: "flexible", theme: "light" }}
                 ref={turnstileRef}
@@ -332,8 +330,8 @@ export default function Home() {
               </p>
             )}
             <button disabled={formStatus === "sending" || !turnstileToken} type="submit">{formStatus === "sending" ? "Sending…" : "Send project brief"} <span>↗</span></button>
-            <p aria-live="polite" className={`form-status ${formStatus}`}>
-              {formMessage}
+            <p aria-live="polite" className={`form-status ${securityMessage ? "error" : formStatus}`}>
+              {securityMessage || formMessage}
             </p>
           </form>
         </div>

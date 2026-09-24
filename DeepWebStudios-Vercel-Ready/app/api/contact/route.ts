@@ -13,24 +13,38 @@ const allowedNeeds = [
 
 const contactSchema = z
   .object({
-    name: z.string().trim().min(2).max(80),
-    business: z.string().trim().min(2).max(120),
+    name: z
+      .string()
+      .trim()
+      .min(2, "Please enter your name.")
+      .max(80, "Please keep your name under 80 characters."),
+    business: z
+      .string()
+      .trim()
+      .min(2, "Please enter your business name.")
+      .max(120, "Please keep your business name under 120 characters."),
     contact: z
       .string()
       .trim()
-      .min(6)
-      .max(120)
+      .min(6, "Enter a valid email address or phone number.")
+      .max(120, "Enter a valid email address or phone number.")
       .refine(
         (value) =>
           z.string().email().safeParse(value).success ||
           /^\+?[0-9][0-9\s()-]{5,19}$/.test(value),
         "Enter a valid email address or phone number.",
       ),
-    need: z.enum(allowedNeeds),
-    turnstileToken: z.string().min(1).max(2048),
-    website: z.string().max(0).optional(),
+    need: z.enum(allowedNeeds, "Please choose what you need."),
+    turnstileToken: z
+      .string()
+      .min(1, "Please complete the security check.")
+      .max(2048, "Verification failed. Please refresh and try again."),
+    // Honeypot: checked after parsing so bots are not told what caught them.
+    website: z.string().max(500).optional(),
   })
   .strict();
+
+const friendlyIssueCodes = new Set(["too_small", "too_big", "custom", "invalid_value"]);
 
 type TurnstileResult = {
   success: boolean;
@@ -104,15 +118,27 @@ export async function POST(request: Request) {
       );
     }
 
-    const parsed = contactSchema.safeParse(await request.json());
-    if (!parsed.success) {
-      return NextResponse.json(
-        { error: parsed.error.issues[0]?.message || "Please check your details." },
-        { status: 400 },
-      );
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch {
+      return NextResponse.json({ error: "Invalid request." }, { status: 400 });
     }
 
-    const { name, business, contact, need, turnstileToken } = parsed.data;
+    const parsed = contactSchema.safeParse(body);
+    if (!parsed.success) {
+      // Only the messages written in the schema are shown; library defaults are too technical.
+      const issue = parsed.error.issues[0];
+      const message =
+        issue && friendlyIssueCodes.has(issue.code) ? issue.message : "Please check your details.";
+      return NextResponse.json({ error: message }, { status: 400 });
+    }
+
+    const { name, business, contact, need, turnstileToken, website } = parsed.data;
+    if (website) {
+      return NextResponse.json({ success: true });
+    }
+
     const verificationResponse = await fetch(
       "https://challenges.cloudflare.com/turnstile/v0/siteverify",
       {
@@ -164,7 +190,11 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json({ success: true });
-  } catch {
-    return NextResponse.json({ error: "Invalid request." }, { status: 400 });
+  } catch (error) {
+    console.error("Contact form request failed:", error);
+    return NextResponse.json(
+      { error: "Something went wrong on our side. Please try again shortly." },
+      { status: 500 },
+    );
   }
 }
