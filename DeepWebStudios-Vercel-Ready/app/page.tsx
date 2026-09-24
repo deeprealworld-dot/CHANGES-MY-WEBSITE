@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useRef, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
 
@@ -63,8 +63,41 @@ export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [formStatus, setFormStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
   const [formMessage, setFormMessage] = useState("");
+  // Kept apart from formMessage so a passing security check only clears its own error.
+  const [securityMessage, setSecurityMessage] = useState("");
   const [turnstileToken, setTurnstileToken] = useState("");
   const turnstileRef = useRef<TurnstileInstance>(null);
+  const tickerRef = useRef<HTMLDivElement>(null);
+
+  // Ease the ticker to a stop on hover (and back up on leave) instead of halting it instantly.
+  useEffect(() => {
+    const ticker = tickerRef.current;
+    const animation = ticker?.querySelector(".ticker-track")?.getAnimations()[0];
+    if (!ticker || !animation) return;
+
+    let frame = 0;
+    const easeTo = (target: number) => {
+      cancelAnimationFrame(frame);
+      const from = animation.playbackRate;
+      const startedAt = performance.now();
+      const step = (now: number) => {
+        const progress = Math.min(1, (now - startedAt) / 700);
+        animation.playbackRate = from + (target - from) * (1 - (1 - progress) ** 3);
+        if (progress < 1) frame = requestAnimationFrame(step);
+      };
+      frame = requestAnimationFrame(step);
+    };
+    const slowDown = () => easeTo(0);
+    const speedUp = () => easeTo(1);
+
+    ticker.addEventListener("pointerenter", slowDown);
+    ticker.addEventListener("pointerleave", speedUp);
+    return () => {
+      cancelAnimationFrame(frame);
+      ticker.removeEventListener("pointerenter", slowDown);
+      ticker.removeEventListener("pointerleave", speedUp);
+    };
+  }, []);
 
   async function sendInquiry(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -125,7 +158,7 @@ export default function Home() {
         <nav
           aria-label="Primary navigation"
           className={`absolute left-0 right-0 top-20 flex flex-col border-b border-[#0f172a]/10 bg-white p-6 transition-all lg:static lg:flex lg:flex-row lg:items-center lg:gap-10 lg:border-0 lg:bg-transparent lg:p-0 ${
-            menuOpen ? "translate-y-0 opacity-100" : "pointer-events-none -translate-y-3 opacity-0 lg:pointer-events-auto lg:translate-y-0 lg:opacity-100"
+            menuOpen ? "translate-y-0 opacity-100" : "pointer-events-none -translate-y-3 opacity-0 max-lg:invisible lg:pointer-events-auto lg:translate-y-0 lg:opacity-100"
           }`}
         >
           {[["Work", "#work"], ["Services", "#services"], ["Process", "#process"], ["Pricing", "#pricing"]].map(([label, href]) => (
@@ -135,8 +168,8 @@ export default function Home() {
           ))}
         </nav>
 
-        <a className="primary-cta hidden justify-self-end lg:inline-flex" href="#contact">Start project <span>↗</span></a>
-        <button aria-expanded={menuOpen} aria-label={menuOpen ? "Close menu" : "Open menu"} className="flex h-11 w-11 flex-col items-center justify-center gap-1.5 bg-[#0f172a] lg:hidden" onClick={() => setMenuOpen((open) => !open)} type="button">
+        <a className="primary-cta header-cta justify-self-end" href="#contact">Start project <span>↗</span></a>
+        <button aria-expanded={menuOpen} aria-label={menuOpen ? "Close menu" : "Open menu"} className="flex h-11 w-11 shrink-0 flex-col items-center justify-center gap-1.5 bg-[#0f172a] lg:hidden" onClick={() => setMenuOpen((open) => !open)} type="button">
           <span className={`h-0.5 w-5 bg-white transition ${menuOpen ? "translate-y-1 rotate-45" : ""}`} />
           <span className={`h-0.5 w-5 bg-white transition ${menuOpen ? "-translate-y-1 -rotate-45" : ""}`} />
         </button>
@@ -162,7 +195,7 @@ export default function Home() {
         </div>
       </section>
 
-      <div className="ticker overflow-hidden border-y border-white/10 bg-[#0a0f1c] py-7 text-white">
+      <div className="ticker overflow-hidden border-y border-white/10 bg-[#0a0f1c] py-7 text-white" ref={tickerRef}>
         <div className="ticker-track anton text-3xl opacity-30">
           {[0, 1].map((copy) => (
             <div aria-hidden={copy === 1} className="ticker-group" key={copy}>
@@ -294,33 +327,29 @@ export default function Home() {
         <div className="relative z-10 mx-auto grid max-w-[1312px] items-center gap-16 lg:grid-cols-[1fr_.8fr] lg:gap-28">
           <div><p className="eyebrow !text-white/70">Start the conversation</p><h2 className="anton mt-6 text-[clamp(60px,7vw,102px)] leading-[.88] tracking-[-.025em] text-white">Let&apos;s build a site<br />worth trusting.</h2><p className="mt-9 max-w-xl text-lg leading-relaxed text-white/90">Tell us about your business and submit the form. Your project brief will be delivered directly to our inbox.</p><a className="mt-6 inline-block border-b border-white/50 pb-1 font-black" href="mailto:support@deepwebstudios.com">support@deepwebstudios.com ↗</a></div>
           <form className="contact-form" onSubmit={sendInquiry}>
-            <label><span>Your name</span><input name="name" placeholder="Enter your name" required /></label>
-            <label><span>Business name</span><input name="business" placeholder="What do you run?" required /></label>
-            <label><span>Email or WhatsApp</span><input name="contact" placeholder="How should we reach you?" required /></label>
+            <label><span>Your name</span><input maxLength={80} minLength={2} name="name" placeholder="Enter your name" required /></label>
+            <label><span>Business name</span><input maxLength={120} minLength={2} name="business" placeholder="What do you run?" required /></label>
+            <label><span>Email or WhatsApp</span><input maxLength={120} minLength={6} name="contact" placeholder="How should we reach you?" required /></label>
             <label><span>What do you need?</span><select defaultValue="A new business website" name="need"><option>A new business website</option><option>A redesign of my current website</option><option>A landing page</option><option>Not sure yet</option></select></label>
             <label className="form-honeypot" aria-hidden="true"><span>Website</span><input autoComplete="off" name="website" tabIndex={-1} /></label>
             {turnstileSiteKey ? (
               <Turnstile
                 onError={(code) => {
                   setTurnstileToken("");
-                  setFormMessage(`Security check failed (${code}). Please refresh.`);
-                  setFormStatus("error");
+                  setSecurityMessage(`Security check failed (${code}). Please refresh.`);
                 }}
                 onExpire={() => setTurnstileToken("")}
                 onSuccess={(token) => {
                   setTurnstileToken(token);
-                  setFormMessage("");
-                  setFormStatus("idle");
+                  setSecurityMessage("");
                 }}
                 onTimeout={() => {
                   setTurnstileToken("");
-                  setFormMessage("Security check timed out. Please try again.");
-                  setFormStatus("error");
+                  setSecurityMessage("Security check timed out. Please try again.");
                 }}
                 onUnsupported={() => {
                   setTurnstileToken("");
-                  setFormMessage("This browser cannot run the security check. Please try another browser.");
-                  setFormStatus("error");
+                  setSecurityMessage("This browser cannot run the security check. Please try another browser.");
                 }}
                 options={{ action: "contact", appearance: "always", size: "flexible", theme: "light" }}
                 ref={turnstileRef}
@@ -332,8 +361,8 @@ export default function Home() {
               </p>
             )}
             <button disabled={formStatus === "sending" || !turnstileToken} type="submit">{formStatus === "sending" ? "Sending…" : "Send project brief"} <span>↗</span></button>
-            <p aria-live="polite" className={`form-status ${formStatus}`}>
-              {formMessage}
+            <p aria-live="polite" className={`form-status ${securityMessage ? "error" : formStatus}`}>
+              {securityMessage || formMessage}
             </p>
           </form>
         </div>
