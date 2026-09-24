@@ -36,6 +36,7 @@ button,input,select { font:inherit; }
 .highlight { color:white; display:inline-block; isolation:isolate; padding:0 .08em; position:relative; }
 .highlight::before { background:var(--blue); content:""; inset:-.02em -.04em -.03em; position:absolute; transform:rotate(-2deg); z-index:-1; }
 .ticker-track { animation:ticker-scroll 18s linear infinite; display:flex; transform:translate3d(0,0,0); width:max-content; will-change:transform; }
+.ticker:hover .ticker-track { animation-play-state:paused; }
 .ticker-group { align-items:center; display:flex; flex:none; min-width:max-content; }
 .ticker-item { align-items:center; display:flex; flex-shrink:0; gap:3rem; padding-right:3rem; white-space:nowrap; }
 .ticker-track i { color:var(--teal); font-family:"Satoshi",sans-serif; font-size:12px; }
