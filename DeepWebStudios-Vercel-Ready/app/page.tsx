@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useRef, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
 
@@ -67,6 +67,37 @@ export default function Home() {
   const [securityMessage, setSecurityMessage] = useState("");
   const [turnstileToken, setTurnstileToken] = useState("");
   const turnstileRef = useRef<TurnstileInstance>(null);
+  const tickerRef = useRef<HTMLDivElement>(null);
+
+  // Ease the ticker to a stop on hover (and back up on leave) instead of halting it instantly.
+  useEffect(() => {
+    const ticker = tickerRef.current;
+    const animation = ticker?.querySelector(".ticker-track")?.getAnimations()[0];
+    if (!ticker || !animation) return;
+
+    let frame = 0;
+    const easeTo = (target: number) => {
+      cancelAnimationFrame(frame);
+      const from = animation.playbackRate;
+      const startedAt = performance.now();
+      const step = (now: number) => {
+        const progress = Math.min(1, (now - startedAt) / 700);
+        animation.playbackRate = from + (target - from) * (1 - (1 - progress) ** 3);
+        if (progress < 1) frame = requestAnimationFrame(step);
+      };
+      frame = requestAnimationFrame(step);
+    };
+    const slowDown = () => easeTo(0);
+    const speedUp = () => easeTo(1);
+
+    ticker.addEventListener("pointerenter", slowDown);
+    ticker.addEventListener("pointerleave", speedUp);
+    return () => {
+      cancelAnimationFrame(frame);
+      ticker.removeEventListener("pointerenter", slowDown);
+      ticker.removeEventListener("pointerleave", speedUp);
+    };
+  }, []);
 
   async function sendInquiry(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -164,7 +195,7 @@ export default function Home() {
         </div>
       </section>
 
-      <div className="ticker overflow-hidden border-y border-white/10 bg-[#0a0f1c] py-7 text-white">
+      <div className="ticker overflow-hidden border-y border-white/10 bg-[#0a0f1c] py-7 text-white" ref={tickerRef}>
         <div className="ticker-track anton text-3xl opacity-30">
           {[0, 1].map((copy) => (
             <div aria-hidden={copy === 1} className="ticker-group" key={copy}>
