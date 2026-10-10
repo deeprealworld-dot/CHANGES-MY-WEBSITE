@@ -61,6 +61,7 @@ const packages = [
 export default function Home() {
   const turnstileSiteKey = (process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "").trim();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [openProject, setOpenProject] = useState(0);
   const [formStatus, setFormStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
   const [formMessage, setFormMessage] = useState("");
   // Kept apart from formMessage so a passing security check only clears its own error.
@@ -235,30 +236,46 @@ export default function Home() {
             <p>Purpose-built demo experiences for the exact kinds of local businesses we help. Responsive, focused, and ready to adapt.</p>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-2">
-            {projects.map(({ title, type, visual, url }, index) => (
-              <article className={`project-card overflow-hidden border border-[#0f172a]/10 bg-white ${index === 0 ? "md:col-span-2" : ""}`} key={title}>
-                <div className={`project-visual ${visual} ${index === 0 ? "min-h-[460px] md:min-h-[540px]" : "min-h-[400px]"}`}>
-                  {visual === "classes" && <><div className="relative z-10 flex items-center justify-between text-xs font-bold tracking-widest"><b className="text-2xl text-[#f5c94c]">ROYAL</b><span>ABOUT&nbsp;&nbsp; COURSES&nbsp;&nbsp; RESULTS</span></div><div className="relative z-10 mt-24"><small>ADMISSIONS OPEN 2026–27</small><strong>RESULTS THAT<br />SPEAK LOUDER.</strong><i>EXPLORE COURSES →</i></div><div className="result-stamp">96%</div></>}
-                  {visual === "gym" && <><strong className="anton relative z-10 block text-[clamp(50px,5vw,76px)] leading-[.88]">THE FITNESS<br />SQUARE</strong><div className="gym-ring"><span>24/7</span></div><b className="absolute bottom-11 left-10 text-xs tracking-widest text-[#c6ff00]">START TRAINING ↗</b></>}
-                  {visual === "clinic" && <><div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#0d9488] font-black text-white">MC</div><strong className="anton mt-7 block max-w-md text-[clamp(45px,5vw,72px)] leading-[.92]">CARE THAT STARTS<br />WITH LISTENING.</strong><div className="clinic-steps"><span>01<br /><b>Consult</b></span><span>02<br /><b>Treat</b></span><span>03<br /><b>Follow up</b></span></div></>}
-                  {visual === "restaurant" && <><p className="restaurant-kicker">Mumbai dining / 2026</p><strong className="anton relative z-10 block text-[clamp(52px,6vw,86px)] leading-[.86]">GOOD FOOD.<br />BETTER NIGHTS.</strong><div className="restaurant-plate">DINE</div><span className="project-action">Reserve a table ↗</span></>}
-                  {visual === "plus" && <><span className="plus-mark">PLUS</span><strong className="anton relative z-10 mt-16 block text-[clamp(52px,6vw,82px)] leading-[.86]">YOUR FITNESS.<br />YOUR WAY.</strong><div className="plus-stripe" /><span className="project-action">Join Andheri ↗</span></>}
-                  {visual === "studio" && <><span className="studio-label">Mumbai / Independent web studio</span><strong className="anton relative z-10 mt-16 block text-[clamp(55px,6vw,88px)] leading-[.86]">WEBSITES THAT<br /><em>WIN TRUST.</em></strong><div className="studio-grid-mark">D.</div><span className="project-action">Start a project ↗</span></>}
-                </div>
-                <div className="flex flex-col gap-3 border-t border-[#0f172a]/10 p-6 sm:flex-row sm:items-end sm:justify-between">
-                  <div className="flex items-center gap-3"><span className="rounded-full bg-[#14b8a6] px-2.5 py-1 text-[9px] font-black uppercase tracking-widest text-[#0a0f1c]">Demo</span><h3 className="anton text-3xl text-[#0f172a]">{title}</h3></div>
-                  <div className="flex flex-col items-start gap-2 sm:items-end">
-                    <p className="text-xs text-[#64748b]">{type}</p>
+          <div className="work-list">
+            {projects.map(({ title, type, visual, url }, index) => {
+              const open = openProject === index;
+              return (
+                <article
+                  className={`work-row ${open ? "open" : ""}`}
+                  key={title}
+                  onPointerEnter={(event) => {
+                    // Hover opens rows for mouse users; touch and keyboard use the button below.
+                    if (event.pointerType === "mouse") setOpenProject(index);
+                  }}
+                >
+                  <div className="work-row-header">
+                    <h3>
+                      <button aria-controls={`work-panel-${index}`} aria-expanded={open} className="work-row-toggle" onClick={() => setOpenProject(index)} type="button">
+                        <span className="work-row-index">{String(index + 1).padStart(2, "0")}</span>
+                        <span className="demo-tag">Demo</span>
+                        <span className="anton work-row-title">{title}</span>
+                        <span className="work-row-type">{type}</span>
+                      </button>
+                    </h3>
                     {url ? (
                       <a aria-label={`Open ${title} live demo`} className="demo-link" href={url} rel="noreferrer" target="_blank">View live demo ↗</a>
                     ) : (
                       <span className="demo-link pending" title="Add this project's URL in the projects array before deployment">Live link coming soon</span>
                     )}
                   </div>
-                </div>
-              </article>
-            ))}
+                  <div aria-hidden={!open} className="work-row-panel" id={`work-panel-${index}`}>
+                    <div className={`project-visual ${visual}`}>
+                      {visual === "classes" && <><div className="relative z-10 flex items-center justify-between text-xs font-bold tracking-widest"><b className="text-2xl text-[#f5c94c]">ROYAL</b><span>ABOUT&nbsp;&nbsp; COURSES&nbsp;&nbsp; RESULTS</span></div><div className="relative z-10 mt-24"><small>ADMISSIONS OPEN 2026–27</small><strong>RESULTS THAT<br />SPEAK LOUDER.</strong><i>EXPLORE COURSES →</i></div><div className="result-stamp">96%</div></>}
+                      {visual === "gym" && <><strong className="anton relative z-10 block text-[clamp(50px,5vw,76px)] leading-[.88]">THE FITNESS<br />SQUARE</strong><div className="gym-ring"><span>24/7</span></div><b className="absolute bottom-11 left-10 text-xs tracking-widest text-[#c6ff00]">START TRAINING ↗</b></>}
+                      {visual === "clinic" && <><div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#0d9488] font-black text-white">MC</div><strong className="anton mt-7 block max-w-md text-[clamp(45px,5vw,72px)] leading-[.92]">CARE THAT STARTS<br />WITH LISTENING.</strong><div className="clinic-steps"><span>01<br /><b>Consult</b></span><span>02<br /><b>Treat</b></span><span>03<br /><b>Follow up</b></span></div></>}
+                      {visual === "restaurant" && <><p className="restaurant-kicker">Mumbai dining / 2026</p><strong className="anton relative z-10 block text-[clamp(52px,6vw,86px)] leading-[.86]">GOOD FOOD.<br />BETTER NIGHTS.</strong><div className="restaurant-plate">DINE</div><span className="project-action">Reserve a table ↗</span></>}
+                      {visual === "plus" && <><span className="plus-mark">PLUS</span><strong className="anton relative z-10 mt-16 block text-[clamp(52px,6vw,82px)] leading-[.86]">YOUR FITNESS.<br />YOUR WAY.</strong><div className="plus-stripe" /><span className="project-action">Join Andheri ↗</span></>}
+                      {visual === "studio" && <><span className="studio-label">Mumbai / Independent web studio</span><strong className="anton relative z-10 mt-16 block text-[clamp(55px,6vw,88px)] leading-[.86]">WEBSITES THAT<br /><em>WIN TRUST.</em></strong><div className="studio-grid-mark">D.</div><span className="project-action">Start a project ↗</span></>}
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
           </div>
         </div>
       </section>
