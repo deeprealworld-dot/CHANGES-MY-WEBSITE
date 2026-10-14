@@ -30,6 +30,7 @@ button,input,select { font:inherit; }
   background-image:linear-gradient(rgba(15,23,42,.1) 1px,transparent 1px),linear-gradient(90deg,rgba(15,23,42,.1) 1px,transparent 1px);
   background-size:40px 40px;
 }
+.hero-square-trail { height:100%; inset:0; pointer-events:none; position:absolute; width:100%; }
 .hero-glow { background:radial-gradient(circle,rgba(37,99,235,.13),transparent 66%); height:700px; left:50%; pointer-events:none; position:absolute; top:42%; transform:translate(-50%,-50%); width:900px; }
 .status-dot { animation:pulse 1.8s ease-in-out infinite; }
 @keyframes pulse { 50% { box-shadow:0 0 0 7px rgba(20,184,166,.15); } }
