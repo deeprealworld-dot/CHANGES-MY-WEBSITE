@@ -58,6 +58,52 @@ const packages = [
   ["Pro", "For ambitious institutions", "₹19,999", ["Custom multi-page system", "Advanced content structure", "Conversion-led user journeys", "Post-launch support"]],
 ];
 
+type Testimonial = {
+  headline: string;
+  quote: string;
+  name: string;
+  business: string;
+  sample?: boolean;
+};
+
+// Replace the samples with real client words. Samples only show in local dev and on Vercel
+// preview links, never in production; with no real entries the section is hidden there.
+const testimonials: Testimonial[] = [
+  {
+    headline: "Customers find us first now",
+    quote: "We used to depend on walk-ins. Now people message us on WhatsApp straight from the website, already knowing our timings and prices.",
+    name: "Sample client",
+    business: "Gym owner · Andheri",
+    sample: true,
+  },
+  {
+    headline: "We look like a big brand",
+    quote: "Patients say the website made them trust the clinic before they ever walked in.",
+    name: "Sample client",
+    business: "Clinic founder · Bandra",
+    sample: true,
+  },
+  {
+    headline: "Clear price, no surprises",
+    quote: "We knew the cost and the timeline on day one, and the site went live exactly when promised.",
+    name: "Sample client",
+    business: "Coaching institute · Thane",
+    sample: true,
+  },
+];
+
+const showSampleTestimonials =
+  process.env.NODE_ENV === "development" || process.env.NEXT_PUBLIC_VERCEL_ENV === "preview";
+const visibleTestimonials = testimonials.filter(({ sample }) => showSampleTestimonials || !sample);
+
+const initials = (name: string) =>
+  name
+    .split(/\s+/)
+    .map((word) => word[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+
 export default function Home() {
   const turnstileSiteKey = (process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "").trim();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -338,6 +384,31 @@ export default function Home() {
           ))}
         </div>
       </section>
+
+      {visibleTestimonials.length > 0 && (
+        <section className="px-6 py-28 lg:px-12 lg:py-40" id="testimonials">
+          <div className="mx-auto max-w-[1312px]">
+            <div className="section-heading">
+              <div><p className="eyebrow">Client words</p><h2>Don&apos;t take<br />our word for it.</h2></div>
+              <p>Local business owners on what changed once their new website went live.</p>
+            </div>
+            <div className="testimonial-grid">
+              {visibleTestimonials.map(({ headline, quote, name, business, sample }, index) => (
+                <figure className={`testimonial-card ${index === 0 ? "featured" : ""} ${index === 1 ? "dark" : ""}`} key={`${business}-${headline}`}>
+                  <span aria-hidden="true" className="testimonial-mark">“</span>
+                  {sample && <span className="sample-badge">Sample · replace before launch</span>}
+                  <p className="testimonial-headline">{headline}</p>
+                  <blockquote><p>{quote}</p></blockquote>
+                  <figcaption>
+                    <span aria-hidden="true" className="testimonial-initials">{initials(name)}</span>
+                    <span><b>{name}</b><small>{business}</small></span>
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       <section className="contact-section" id="contact">
         <div className="contact-words" aria-hidden="true"><span>READY TO BUILD</span><span>READY TO LAUNCH</span></div>
