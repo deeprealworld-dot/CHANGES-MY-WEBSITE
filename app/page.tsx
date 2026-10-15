@@ -3,6 +3,7 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
+import { HeroSquareTrail } from "./hero-square-trail";
 
 type Project = {
   title: string;
@@ -178,6 +179,7 @@ export default function Home() {
 
       <section className="hero-grid relative flex min-h-[760px] items-center justify-center px-6 pb-24 pt-44 text-center md:min-h-screen" id="top">
         <div className="hero-glow" />
+        <HeroSquareTrail />
         <div className="relative z-10 mx-auto max-w-[1250px]">
           <div className="mb-9 inline-flex items-center gap-2.5 rounded-full border border-[#0f172a]/10 bg-white/90 px-3.5 py-2 text-[10px] font-black uppercase tracking-[.16em] text-[#64748b]">
             <span className="status-dot h-2 w-2 rounded-full bg-[#14b8a6]" />Available for new projects
