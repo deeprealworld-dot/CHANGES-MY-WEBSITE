@@ -92,6 +92,17 @@ export default function Home() {
   const [turnstileToken, setTurnstileToken] = useState("");
   const turnstileRef = useRef<TurnstileInstance>(null);
   const tickerRef = useRef<HTMLDivElement>(null);
+  const timeZoneRef = useRef<HTMLInputElement>(null);
+
+  // Pre-fill the visitor's time zone so they only have to confirm it.
+  const fillTimeZone = () => {
+    try {
+      if (timeZoneRef.current) timeZoneRef.current.value = Intl.DateTimeFormat().resolvedOptions().timeZone ?? "";
+    } catch {
+      // Leave the field empty if the browser cannot report a time zone.
+    }
+  };
+  useEffect(fillTimeZone, []);
 
   // Ease the ticker to a stop on hover (and back up on leave) instead of halting it instantly.
   useEffect(() => {
@@ -144,6 +155,11 @@ export default function Home() {
           business: form.get("business"),
           contact: form.get("contact"),
           need: form.get("need"),
+          country: form.get("country"),
+          timeZone: form.get("timeZone"),
+          currentSite: form.get("currentSite"),
+          budget: form.get("budget"),
+          timeline: form.get("timeline"),
           website: form.get("website"),
           turnstileToken,
         }),
@@ -155,6 +171,7 @@ export default function Home() {
       }
 
       formElement.reset();
+      fillTimeZone();
       setTurnstileToken("");
       turnstileRef.current?.reset();
       setFormStatus("success");
@@ -404,7 +421,16 @@ export default function Home() {
             <label><span>Your name</span><input maxLength={80} minLength={2} name="name" placeholder="Enter your name" required /></label>
             <label><span>Business name</span><input maxLength={120} minLength={2} name="business" placeholder="What do you run?" required /></label>
             <label><span>Email or WhatsApp</span><input maxLength={120} minLength={6} name="contact" placeholder="How should we reach you?" required /></label>
-            <label><span>What do you need?</span><select defaultValue="A new business website" name="need"><option>A new business website</option><option>A redesign of my current website</option><option>A landing page</option><option>Not sure yet</option></select></label>
+            <label><span>What do you need?</span><select defaultValue="A new business website" name="need"><option>A new business website</option><option>A redesign of my current website</option><option>A landing page</option><option>Development support for my team</option><option>Not sure yet</option></select></label>
+            <div className="form-row">
+              <label><span>Country <i>optional</i></span><input autoComplete="country-name" maxLength={80} name="country" placeholder="Where are you based?" /></label>
+              <label><span>Time zone <i>optional</i></span><input maxLength={60} name="timeZone" placeholder="e.g. Europe/London" ref={timeZoneRef} /></label>
+            </div>
+            <label><span>Current website <i>optional</i></span><input autoCapitalize="none" autoComplete="url" inputMode="url" maxLength={200} name="currentSite" placeholder="yourbusiness.com" /></label>
+            <div className="form-row">
+              <label><span>Budget range</span><select defaultValue="Not sure yet" name="budget"><option>Not sure yet</option><option>Under $500</option><option>$500 – $1,000</option><option>$1,000 – $2,500</option><option>$2,500+</option></select></label>
+              <label><span>Launch date</span><select defaultValue="Flexible" name="timeline"><option>Flexible</option><option>As soon as possible</option><option>Within 1 month</option><option>In 1 – 3 months</option></select></label>
+            </div>
             <label className="form-honeypot" aria-hidden="true"><span>Website</span><input autoComplete="off" name="website" tabIndex={-1} /></label>
             {turnstileSiteKey ? (
               <Turnstile
