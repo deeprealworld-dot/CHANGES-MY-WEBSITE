@@ -4,7 +4,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "DeepWebStudios | Websites That Win Trust",
   description:
-    "Distinctive, fast websites for Mumbai local businesses—designed to build trust and generate real inquiries.",
+    "Distinctive, fast websites for ambitious businesses—custom design and thoughtful development, built to earn trust and generate real inquiries.",
   other: {
     "codex-preview": "development",
   },

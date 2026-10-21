@@ -5,11 +5,18 @@ import Image from "next/image";
 import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
 import { HeroSquareTrail } from "./hero-square-trail";
 
+type CaseStudy = {
+  objective: string;
+  design: string;
+  implementation: string;
+};
+
 type Project = {
   title: string;
   type: string;
   visual: "classes" | "gym" | "clinic" | "restaurant" | "plus" | "studio";
   url: string;
+  caseStudy?: CaseStudy;
 };
 
 const projects: Project[] = [
@@ -18,18 +25,33 @@ const projects: Project[] = [
     type: "Education / Multi-page experience",
     visual: "classes",
     url: "https://royal-classes-demo.vercel.app/", // TODO_DEMO_URL: Add the deployed Royal Classes URL.
+    caseStudy: {
+      objective: "Show how a coaching institute can explain its courses, results and admissions across several pages while keeping one clear path to enquire.",
+      design: "Deep navy and gold for authority. Results lead the first screen because that is what parents compare first, and the navigation stays short: About, Courses, Results.",
+      implementation: "Next.js and TypeScript. Nine course pages generated from one template, plus admission, results, testimonials and gallery pages. Admission enquiries open a pre-filled WhatsApp message. Deployed on Vercel.",
+    },
   },
   {
     title: "The Fitness Square",
     type: "Gym / Lead generation",
     visual: "gym",
     url: "https://modern-gym-website-design-d6swxjjgk.vercel.app/",
+    caseStudy: {
+      objective: "Turn gym browsers into membership enquiries, with the next step always one tap away.",
+      design: "High-contrast black and lime for energy, an oversized name for instant recall, and one repeated call to action: start training.",
+      implementation: "Next.js 16, React 19 and Tailwind CSS. Membership tiers, trainers, FAQ and a free-pass enquiry section, plus About, Careers and Contact pages. The enquiry form is a front-end prototype in this demo. Deployed on Vercel.",
+    },
   },
   {
     title: "Mumbai Care Clinic",
     type: "Clinic / Appointment journey",
     visual: "clinic",
     url: "https://doctors-website-demo.vercel.app/", // TODO_DEMO_URL: Add the deployed clinic demo URL.
+    caseStudy: {
+      objective: "Help patients, in the language they are comfortable with, understand the clinic's services and move to an appointment request without friction.",
+      design: "Calm teal, a large readable headline, and a three-step journey (consult, treat, follow up) that sets expectations before a patient calls. English, Hindi and Marathi are one tap away.",
+      implementation: "React and Tailwind CSS in English, Hindi and Marathi. A calendar and time-slot appointment form with validation, plus floating WhatsApp and call buttons. The form is a front-end prototype in this demo. Deployed on Vercel.",
+    },
   },
   {
     title: "Restaurant Demo",
@@ -53,12 +75,6 @@ const processSteps = [
   ["03", "Launch", "We test, connect your domain, and hand over a website ready to generate genuine inquiries."],
 ];
 
-const packages = [
-  ["Starter", "For solo professionals", "₹5,999", ["Single-page custom build", "WhatsApp-ready lead flow", "Google Maps integration"]],
-  ["Growth", "For growing local businesses", "₹9,999", ["Up to five custom pages", "Lead capture system", "Local SEO foundations", "Content editing setup"]],
-  ["Pro", "For ambitious institutions", "₹19,999", ["Custom multi-page system", "Advanced content structure", "Conversion-led user journeys", "Post-launch support"]],
-];
-
 export default function Home() {
   const turnstileSiteKey = (process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "").trim();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -70,6 +86,17 @@ export default function Home() {
   const [turnstileToken, setTurnstileToken] = useState("");
   const turnstileRef = useRef<TurnstileInstance>(null);
   const tickerRef = useRef<HTMLDivElement>(null);
+  const timeZoneRef = useRef<HTMLInputElement>(null);
+
+  // Pre-fill the visitor's time zone so they only have to confirm it.
+  const fillTimeZone = () => {
+    try {
+      if (timeZoneRef.current) timeZoneRef.current.value = Intl.DateTimeFormat().resolvedOptions().timeZone ?? "";
+    } catch {
+      // Leave the field empty if the browser cannot report a time zone.
+    }
+  };
+  useEffect(fillTimeZone, []);
 
   // Ease the ticker to a stop on hover (and back up on leave) instead of halting it instantly.
   useEffect(() => {
@@ -122,6 +149,11 @@ export default function Home() {
           business: form.get("business"),
           contact: form.get("contact"),
           need: form.get("need"),
+          country: form.get("country"),
+          timeZone: form.get("timeZone"),
+          currentSite: form.get("currentSite"),
+          budget: form.get("budget"),
+          timeline: form.get("timeline"),
           website: form.get("website"),
           turnstileToken,
         }),
@@ -133,6 +165,7 @@ export default function Home() {
       }
 
       formElement.reset();
+      fillTimeZone();
       setTurnstileToken("");
       turnstileRef.current?.reset();
       setFormStatus("success");
@@ -188,12 +221,15 @@ export default function Home() {
             We build websites<br />that win <span className="highlight">trust</span>
           </h1>
           <p className="mx-auto mt-11 max-w-3xl text-lg leading-relaxed text-[#64748b] md:text-2xl">
-            Distinctive, fast websites for Mumbai businesses that want to look credible,
-            stand apart, and turn more visitors into real inquiries.
+            Distinctive, fast websites for ambitious businesses that want to stand out,
+            build credibility, and turn more visitors into real inquiries.
+          </p>
+          <p className="anton mx-auto mt-6 text-lg tracking-[.04em] text-[#0f172a] md:text-xl">
+            Custom design. <span className="text-[#2563eb]">Thoughtful development.</span> Ready-to-launch websites.
           </p>
           <div className="mt-11 flex flex-col items-center justify-center gap-7 sm:flex-row">
             <a className="primary-cta hero-cta" href="#contact">Start a project <span>↗</span></a>
-            <a className="anton border-b-2 border-[#0f172a] py-2 text-xl text-[#0f172a] transition hover:border-[#2563eb] hover:text-[#2563eb]" href="#work">View our work <span className="font-sans">↓</span></a>
+            <a className="anton border-b-2 border-[#0f172a] py-2 text-xl text-[#0f172a] transition hover:border-[#2563eb] hover:text-[#2563eb]" href="#work">Explore our work <span className="font-sans">↓</span></a>
           </div>
         </div>
       </section>
@@ -215,7 +251,7 @@ export default function Home() {
       <section className="grid lg:grid-cols-2">
         {[
           ["Traditional approach", "The old way", ["Generic templates that look like every competitor", "Slow pages that lose impatient mobile visitors", "Confusing journeys with no clear next action", "Hidden extras after the project begins"], false],
-          ["Our standard", "The DeepWeb way", ["A visual system shaped around your business", "Fast, responsive layouts built mobile-first", "Conversion paths designed for calls and inquiries", "A clear scope and transparent starting price"], true],
+          ["Our standard", "The DeepWeb way", ["A visual system shaped around your business", "Fast, responsive layouts built mobile-first", "Conversion paths designed for calls and inquiries", "A clear scope and a fixed written quote"], true],
         ].map(([label, title, items, accent]) => (
           <article className={`min-h-[620px] px-6 py-24 md:p-20 xl:p-28 ${accent ? "border-t-8 border-[#2563eb] bg-[#0f172a] lg:border-l-8 lg:border-t-0" : "bg-[#0a0f1c]"}`} key={String(title)}>
             <p className="eyebrow text-[#14b8a6]">{String(label)}</p>
@@ -235,11 +271,11 @@ export default function Home() {
         <div className="mx-auto max-w-[1312px]">
           <div className="section-heading">
             <div><p className="eyebrow">Selected work</p><h2>Built to feel like<br />the business.</h2></div>
-            <p>Purpose-built demo experiences for the exact kinds of local businesses we help. Responsive, focused, and ready to adapt.</p>
+            <p>Purpose-built demo experiences for the kinds of businesses we help. Responsive, focused, and ready to adapt.</p>
           </div>
 
           <div className="work-list">
-            {projects.map(({ title, type, visual, url }, index) => {
+            {projects.map(({ title, type, visual, url, caseStudy }, index) => {
               const open = openProject === index;
               return (
                 <article
@@ -265,7 +301,8 @@ export default function Home() {
                       <span className="demo-link pending" title="Add this project's URL in the projects array before deployment">Live link coming soon</span>
                     )}
                   </div>
-                  <div aria-hidden={!open} className="work-row-panel" id={`work-panel-${index}`}>
+                  <div className="work-row-panel" id={`work-panel-${index}`} inert={!open}>
+                    <div className="work-row-panel-inner">
                     <div className={`project-visual ${visual}`}>
                       {visual === "classes" && <><div className="relative z-10 flex items-center justify-between text-xs font-bold tracking-widest"><b className="text-2xl text-[#f5c94c]">ROYAL</b><span>ABOUT&nbsp;&nbsp; COURSES&nbsp;&nbsp; RESULTS</span></div><div className="relative z-10 mt-24"><small>ADMISSIONS OPEN 2026–27</small><strong>RESULTS THAT<br />SPEAK LOUDER.</strong><i>EXPLORE COURSES →</i></div><div className="result-stamp">96%</div></>}
                       {visual === "gym" && <><strong className="anton relative z-10 block text-[clamp(50px,5vw,76px)] leading-[.88]">THE FITNESS<br />SQUARE</strong><div className="gym-ring"><span>24/7</span></div><b className="absolute bottom-11 left-10 text-xs tracking-widest text-[#c6ff00]">START TRAINING ↗</b></>}
@@ -274,11 +311,24 @@ export default function Home() {
                       {visual === "plus" && <><span className="plus-mark">PLUS</span><strong className="anton relative z-10 mt-16 block text-[clamp(52px,6vw,82px)] leading-[.86]">YOUR FITNESS.<br />YOUR WAY.</strong><div className="plus-stripe" /><span className="project-action">Join Andheri ↗</span></>}
                       {visual === "studio" && <><span className="studio-label">Mumbai / Independent web studio</span><strong className="anton relative z-10 mt-16 block text-[clamp(55px,6vw,88px)] leading-[.86]">WEBSITES THAT<br /><em>WIN TRUST.</em></strong><div className="studio-grid-mark">D.</div><span className="project-action">Start a project ↗</span></>}
                     </div>
+                    {caseStudy && (
+                      <dl className="case-study">
+                        <div><dt>Objective</dt><dd>{caseStudy.objective}</dd></div>
+                        <div><dt>Design decisions</dt><dd>{caseStudy.design}</dd></div>
+                        <div><dt>Implementation</dt><dd>{caseStudy.implementation}</dd></div>
+                        <div>
+                          <dt>Live demo</dt>
+                          <dd>{url ? <a href={url} rel="noreferrer" target="_blank">Open {title} ↗</a> : "Coming soon"}</dd>
+                        </div>
+                      </dl>
+                    )}
+                    </div>
                   </div>
                 </article>
               );
             })}
           </div>
+          <p className="work-note">These are demo projects built to show our approach. Names, figures and results inside them are illustrative, not client results.</p>
         </div>
       </section>
 
@@ -319,17 +369,20 @@ export default function Home() {
       </section>
 
       <section className="mx-auto max-w-[1440px] px-6 py-28 lg:px-12 lg:py-40" id="pricing">
-        <div className="section-heading"><div><p className="eyebrow">Investment</p><h2>Flat fees.<br />No surprises.</h2></div><p>Clear starting points. Final pricing is confirmed after your project scope is understood.</p></div>
-        <div className="grid border border-[#0f172a]/10 lg:grid-cols-3">
-          {packages.map(([name, audience, price, features], index) => (
-            <article className={`price-card ${index === 1 ? "featured" : ""}`} key={String(name)}>
-              {index === 1 && <span className="recommended">Recommended</span>}
-              <h3>{String(name)}</h3><p>{String(audience)}</p><div className="anton mt-10 text-5xl"><small>From</small>{String(price)}</div>
-              <ul>{(features as string[]).map((feature) => <li key={feature}><span>✓</span>{feature}</li>)}</ul>
-              <a href="#contact">{index === 1 ? "Start now" : "Get a quote"} <span>↗</span></a>
-            </article>
-          ))}
-        </div>
+        <div className="section-heading"><div><p className="eyebrow">Investment</p><h2>Fixed quotes.<br />No surprises.</h2></div><p>Every project is different, so every project gets its own written quote. No packages to decode, no hidden extras.</p></div>
+        <article className="quote-offer">
+          <div>
+            <p className="eyebrow">For every client</p>
+            <h3>Your project,<br />quoted in writing.</h3>
+            <p>Quoted in INR for projects in India and in USD for everyone else, so you always know what you are agreeing to.</p>
+            <a href="#contact">Request a quote <span>↗</span></a>
+          </div>
+          <ol>
+            <li><b>01</b><div><h4>Tell us about your project</h4><p>A short form: what you do, what you need and roughly when. It takes a couple of minutes.</p></div></li>
+            <li><b>02</b><div><h4>Get a written quote</h4><p>Scope, timeline and cost for your project: custom design, development, testing and launch.</p></div></li>
+            <li><b>03</b><div><h4>Agree before we start</h4><p>Hosting, domain, paid third-party services and ongoing support: what is included is written down before work begins.</p></div></li>
+          </ol>
+        </article>
       </section>
 
       <section className="bg-[#f8fafc] px-6 py-28 lg:px-12 lg:py-40">
@@ -349,7 +402,16 @@ export default function Home() {
             <label><span>Your name</span><input maxLength={80} minLength={2} name="name" placeholder="Enter your name" required /></label>
             <label><span>Business name</span><input maxLength={120} minLength={2} name="business" placeholder="What do you run?" required /></label>
             <label><span>Email or WhatsApp</span><input maxLength={120} minLength={6} name="contact" placeholder="How should we reach you?" required /></label>
-            <label><span>What do you need?</span><select defaultValue="A new business website" name="need"><option>A new business website</option><option>A redesign of my current website</option><option>A landing page</option><option>Not sure yet</option></select></label>
+            <label><span>What do you need?</span><select defaultValue="A new business website" name="need"><option>A new business website</option><option>A redesign of my current website</option><option>A landing page</option><option>Development support for my team</option><option>Not sure yet</option></select></label>
+            <div className="form-row">
+              <label><span>Country <i>optional</i></span><input autoComplete="country-name" maxLength={80} name="country" placeholder="Where are you based?" /></label>
+              <label><span>Time zone <i>optional</i></span><input maxLength={60} name="timeZone" placeholder="e.g. Europe/London" ref={timeZoneRef} /></label>
+            </div>
+            <label><span>Current website <i>optional</i></span><input autoCapitalize="none" autoComplete="url" inputMode="url" maxLength={200} name="currentSite" placeholder="yourbusiness.com" /></label>
+            <div className="form-row">
+              <label><span>Budget <i>optional</i></span><input maxLength={60} name="budget" placeholder="e.g. ₹30,000 or $500" /></label>
+              <label><span>Launch date</span><select defaultValue="Flexible" name="timeline"><option>Flexible</option><option>As soon as possible</option><option>Within 1 month</option><option>In 1 – 3 months</option></select></label>
+            </div>
             <label className="form-honeypot" aria-hidden="true"><span>Website</span><input autoComplete="off" name="website" tabIndex={-1} /></label>
             {turnstileSiteKey ? (
               <Turnstile
@@ -389,9 +451,9 @@ export default function Home() {
 
       <footer className="bg-[#0a0f1c] text-white">
         <div className="mx-auto grid max-w-[1440px] gap-14 px-6 py-20 md:grid-cols-[2fr_.7fr_.8fr] lg:px-12 lg:py-24">
-          <div><a className="anton text-3xl" href="#top">DEEPWEBSTUDIOS<span className="text-[#2563eb]">.</span></a><p className="mt-7 max-w-md text-lg leading-relaxed text-white/40">Distinctive websites for Mumbai&apos;s ambitious local businesses.</p></div>
+          <div><a className="anton text-3xl" href="#top">DEEPWEBSTUDIOS<span className="text-[#2563eb]">.</span></a><p className="mt-7 max-w-md text-lg leading-relaxed text-white/40">Distinctive websites for ambitious businesses, designed and built in Mumbai.</p></div>
           <div className="footer-column"><span>Explore</span><a href="#work">Work</a><a href="#services">Services</a><a href="#process">Process</a><a href="#pricing">Pricing</a></div>
-          <div className="footer-column"><span>Contact</span><a href="mailto:support@deepwebstudios.com">Email the studio</a><p>Mumbai, India</p></div>
+          <div className="footer-column"><span>Contact</span><a href="mailto:support@deepwebstudios.com">Email the studio</a><p>Based in Mumbai, India. Working with clients worldwide.</p></div>
         </div>
         <div className="mx-auto flex max-w-[1440px] justify-between border-t border-white/10 px-6 py-8 text-[9px] font-black uppercase tracking-widest text-white/30 lg:px-12"><span>© {new Date().getFullYear()} DeepWebStudios</span><a href="#top">Back to top ↑</a></div>
       </footer>

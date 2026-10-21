@@ -8,8 +8,11 @@ const allowedNeeds = [
   "A new business website",
   "A redesign of my current website",
   "A landing page",
+  "Development support for my team",
   "Not sure yet",
 ] as const;
+
+const allowedTimelines = ["Flexible", "As soon as possible", "Within 1 month", "In 1 – 3 months"] as const;
 
 const contactSchema = z
   .object({
@@ -35,6 +38,20 @@ const contactSchema = z
         "Enter a valid email address or phone number.",
       ),
     need: z.enum(allowedNeeds, "Please choose what you need."),
+    country: z.string().trim().max(80, "Please keep your country under 80 characters.").optional(),
+    timeZone: z.string().trim().max(60, "Please keep your time zone under 60 characters.").optional(),
+    // Named currentSite because "website" is the honeypot field.
+    currentSite: z
+      .string()
+      .trim()
+      .max(200, "Please keep your website address under 200 characters.")
+      .refine(
+        (value) => value === "" || /^(https?:\/\/)?[^\s/.]+(\.[^\s/.]+)+(\/\S*)?$/i.test(value),
+        "Enter a valid website address, like yourbusiness.com.",
+      )
+      .optional(),
+    budget: z.string().trim().max(60, "Please keep your budget under 60 characters.").optional(),
+    timeline: z.enum(allowedTimelines, "Please choose a launch date.").optional(),
     turnstileToken: z
       .string()
       .min(1, "Please complete the security check.")
@@ -134,7 +151,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: message }, { status: 400 });
     }
 
-    const { name, business, contact, need, turnstileToken, website } = parsed.data;
+    const { name, business, contact, need, country, timeZone, currentSite, budget, timeline, turnstileToken, website } = parsed.data;
     if (website) {
       return NextResponse.json({ success: true });
     }
@@ -161,6 +178,19 @@ export async function POST(request: Request) {
       );
     }
 
+    // Optional details only appear in the email when the visitor filled them in.
+    const optionalDetails: [string, string | undefined][] = [
+      ["Country", country],
+      ["Time zone", timeZone],
+      ["Current website", currentSite],
+      ["Budget", budget],
+      ["Launch date", timeline],
+    ];
+    const extraDetails: [string, string][] = [];
+    for (const [label, value] of optionalDetails) {
+      if (value) extraDetails.push([label, value]);
+    }
+
     const resend = new Resend(apiKey);
     const { error } = await resend.emails.send({
       from,
@@ -174,6 +204,7 @@ export async function POST(request: Request) {
         `Business: ${business}`,
         `Email or WhatsApp: ${contact}`,
         `Project requirement: ${need}`,
+        ...extraDetails.map(([label, value]) => `${label}: ${value}`),
       ].join("\n"),
       html: `
         <h2>New DeepWebStudios inquiry</h2>
@@ -181,6 +212,7 @@ export async function POST(request: Request) {
         <p><strong>Business:</strong> ${escapeHtml(business)}</p>
         <p><strong>Email or WhatsApp:</strong> ${escapeHtml(contact)}</p>
         <p><strong>Project requirement:</strong> ${escapeHtml(need)}</p>
+        ${extraDetails.map(([label, value]) => `<p><strong>${label}:</strong> ${escapeHtml(value)}</p>`).join("")}
       `,
     });
 
