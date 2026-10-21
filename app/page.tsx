@@ -217,14 +217,14 @@ export default function Home() {
           <div className="mb-9 inline-flex items-center gap-2.5 rounded-full border border-[#0f172a]/10 bg-white/90 px-3.5 py-2 text-[10px] font-black uppercase tracking-[.16em] text-[#5b6b82]">
             <span className="status-dot h-2 w-2 rounded-full bg-[#14b8a6]" />Available for new projects
           </div>
-          <h1 className="anton text-[clamp(58px,8.3vw,124px)] leading-[.98] text-[#0f172a]">
+          <h1 className="anton text-[clamp(48px,8.3vw,124px)] leading-[.98] text-[#0f172a]">
             We build websites<br />that win <span className="highlight">trust</span>
           </h1>
           <p className="mx-auto mt-11 max-w-3xl text-lg leading-relaxed text-[#5b6b82] md:text-2xl">
             Distinctive, fast websites for ambitious businesses that want to stand out,
             build credibility, and turn more visitors into real inquiries.
           </p>
-          <p className="anton mx-auto mt-6 text-lg tracking-[.04em] text-[#0f172a] md:text-xl">
+          <p className="anton mx-auto mt-6 text-balance text-base tracking-[.04em] text-[#0f172a] md:text-xl">
             Custom design. <span className="text-[#2563eb]">Thoughtful development.</span> Ready-to-launch websites.
           </p>
           <div className="mt-11 flex flex-col items-center justify-center gap-7 sm:flex-row">
@@ -255,7 +255,7 @@ export default function Home() {
         ].map(([label, title, items, accent]) => (
           <article className={`min-h-[620px] px-6 py-24 md:p-20 xl:p-28 ${accent ? "border-t-8 border-[#2563eb] bg-[#0f172a] lg:border-l-8 lg:border-t-0" : "bg-[#0a0f1c]"}`} key={String(title)}>
             <p className="eyebrow !text-[#14b8a6]">{String(label)}</p>
-            <h2 className="anton mt-6 text-[clamp(48px,5vw,76px)] leading-none text-white">{String(title)}</h2>
+            <h2 className="anton mt-6 text-[clamp(44px,4.6vw,70px)] leading-none text-white">{String(title)}</h2>
             <ul className="mt-14 grid gap-7">
               {(items as string[]).map((item) => (
                 <li className={`flex items-start gap-4 text-lg leading-relaxed ${accent ? "font-medium text-white" : "text-white/55"}`} key={item}>
@@ -386,7 +386,7 @@ export default function Home() {
       </section>
 
       <section className="bg-[#f8fafc] px-6 py-28 lg:px-12 lg:py-40">
-        <div className="mx-auto max-w-[1312px] text-center"><p className="eyebrow">A better engagement</p><h2 className="anton mt-6 text-[clamp(54px,6vw,88px)] leading-[.98] text-[#0f172a]">Built on clarity,<br />not promises.</h2></div>
+        <div className="mx-auto max-w-[1312px] text-center"><p className="eyebrow">A better engagement</p><h2 className="anton mt-6 text-[clamp(46px,6vw,88px)] leading-[.98] text-[#0f172a]">Built on clarity,<br />not promises.</h2></div>
         <div className="mx-auto mt-16 grid max-w-[1312px] gap-6 md:grid-cols-3">
           {[["01 / See before you commit", "Demo-first", "Start with a focused direction, so you understand the opportunity before a full build begins."], ["02 / No handoffs", "Direct collaboration", "Work with the studio building your site. Feedback stays clear, fast, and close to the result."], ["03 / Clear from day one", "Defined scope", "Deliverables, timeline, and costs are agreed before work starts—no surprise extras."]].map(([label, title, copy], index) => (
             <article className={`proof-card ${index === 1 ? "bg-[#0f172a] text-white md:translate-y-4" : "bg-white text-[#0f172a]"}`} key={title}><span className={index === 1 ? "!text-[#14b8a6]" : undefined}>{label}</span><h3>{title}</h3><p className={index === 1 ? "text-white/55" : "text-[#5b6b82]"}>{copy}</p><i aria-hidden="true">✦</i></article>
@@ -397,7 +397,7 @@ export default function Home() {
       <section className="contact-section" id="contact">
         <div className="contact-words" aria-hidden="true"><span>READY TO BUILD</span><span>READY TO LAUNCH</span></div>
         <div className="relative z-10 mx-auto grid max-w-[1312px] items-center gap-16 lg:grid-cols-[1fr_.8fr] lg:gap-28">
-          <div><p className="eyebrow !text-white">Start the conversation</p><h2 className="anton mt-6 text-[clamp(60px,7vw,102px)] leading-[.98] text-white">Let&apos;s build a site<br />worth trusting.</h2><p className="mt-9 max-w-xl text-lg leading-relaxed text-white/90">Tell us about your business and submit the form. Your project brief will be delivered directly to our inbox.</p><a className="mt-6 inline-block border-b border-white/50 pb-1 font-black" href="mailto:support@deepwebstudios.com">support@deepwebstudios.com ↗</a></div>
+          <div><p className="eyebrow !text-white">Start the conversation</p><h2 className="anton mt-6 text-[clamp(46px,6.2vw,94px)] leading-[.98] text-white">Let&apos;s build a site<br />worth trusting.</h2><p className="mt-9 max-w-xl text-lg leading-relaxed text-white/90">Tell us about your business and submit the form. Your project brief will be delivered directly to our inbox.</p><a className="mt-6 inline-block border-b border-white/50 pb-1 font-black" href="mailto:support@deepwebstudios.com">support@deepwebstudios.com ↗</a></div>
           <form className="contact-form" onSubmit={sendInquiry}>
             <label><span>Your name</span><input maxLength={80} minLength={2} name="name" placeholder="Enter your name" required /></label>
             <label><span>Business name</span><input maxLength={120} minLength={2} name="business" placeholder="What do you run?" required /></label>
