@@ -77,7 +77,7 @@ const processSteps = [
 
 const packages = [
   ["Starter", "For solo professionals", "₹5,999", ["Single-page custom build", "WhatsApp-ready lead flow", "Google Maps integration"]],
-  ["Growth", "For growing local businesses", "₹9,999", ["Up to five custom pages", "Lead capture system", "Local SEO foundations", "Content editing setup"]],
+  ["Growth", "For growing businesses", "₹9,999", ["Up to five custom pages", "Lead capture system", "Local SEO foundations", "Content editing setup"]],
   ["Pro", "For ambitious institutions", "₹19,999", ["Custom multi-page system", "Advanced content structure", "Conversion-led user journeys", "Post-launch support"]],
 ];
 
