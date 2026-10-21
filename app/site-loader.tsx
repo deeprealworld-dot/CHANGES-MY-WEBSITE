@@ -8,8 +8,8 @@ import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 type Variant = 1 | 2 | 3 | 4;
 
 const VARIANTS: Record<Variant, { name: string; runMs: number; exitMs: number }> = {
-  1: { name: "Grid Boot", runMs: 1300, exitMs: 650 },
-  2: { name: "The Brief", runMs: 1800, exitMs: 450 },
+  1: { name: "Grid Boot", runMs: 1500, exitMs: 700 },
+  2: { name: "The Brief", runMs: 2500, exitMs: 60 },
   3: { name: "Stamp", runMs: 1500, exitMs: 500 },
   4: { name: "Marquee Curtain", runMs: 1400, exitMs: 650 },
 };
@@ -129,8 +129,8 @@ function GridBoot({ runMs }: { runMs: number }) {
       for (let row = 0; row < rows; row += 1) {
         for (let col = 0; col < cols; col += 1) {
           const age = front - (col + row);
-          if (age < 0 || age > 9) continue;
-          const alpha = 0.7 * (1 - age / 9);
+          if (age < 0) continue;
+          const alpha = Math.max(0.4, 0.75 * (1 - age / 9));
           context.fillStyle = `rgba(${COLORS[(col * 7 + row * 13) % 3]},${alpha})`;
           context.fillRect(col * CELL + 1, row * CELL + 1, CELL - 1, CELL - 1);
         }
@@ -153,18 +153,97 @@ function GridBoot({ runMs }: { runMs: number }) {
   );
 }
 
-/* 2. The Brief: BRIEF. BUILD. LAUNCH. cut in one after another, then TRUST. expands into the page. */
+/* 2. The Brief: words cut in on a beat while square rings pulse out through the grid; TRUST. lands,
+   then the grid dissolves outward from the centre in a coloured wave to reveal the page. */
+const BEATS = [0, 0.34, 0.68, 1.02]; // seconds: BRIEF. BUILD. LAUNCH. TRUST.
+const PULSE_S = 0.6;
+const REVEAL_AT = 1.75;
+const REVEAL_S = 0.8;
+
 function TheBrief() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const context = canvas?.getContext("2d");
+    const root = canvas?.closest(".ld");
+    if (!canvas || !context || !root) return;
+    const CELL = 40;
+    const COLORS = ["37,99,235", "20,184,166"];
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const cols = Math.ceil(canvas.width / CELL);
+    const rows = Math.ceil(canvas.height / CELL);
+    const cx = (cols - 1) / 2;
+    const cy = (rows - 1) / 2;
+    const maxDist = Math.max(cx, cy) + 1;
+    // Square (Chebyshev) distance from the centre cell, so rings are squares that follow the grid.
+    const distance = (col: number, row: number) => Math.max(Math.abs(col - cx), Math.abs(row - cy));
+    const started = performance.now();
+    let frame = 0;
+    let revealing = false;
+
+    const draw = (now: number) => {
+      const T = Math.max(0, (now - started) / 1000);
+      context.clearRect(0, 0, canvas.width, canvas.height);
+
+      if (T < REVEAL_AT) {
+        BEATS.forEach((beat, index) => {
+          const age = (T - beat) / PULSE_S;
+          if (age < 0 || age > 1) return;
+          const radius = 1.5 + age * maxDist;
+          for (let row = 0; row < rows; row += 1) {
+            for (let col = 0; col < cols; col += 1) {
+              const off = Math.abs(distance(col, row) - radius);
+              if (off > 1.3) continue;
+              const alpha = 0.6 * (1 - age) ** 1.5 * (1 - off / 1.3);
+              context.fillStyle = `rgba(${COLORS[(index + col + row) % 2]},${alpha})`;
+              context.fillRect(col * CELL + 1, row * CELL + 1, CELL - 1, CELL - 1);
+            }
+          }
+        });
+      } else {
+        if (!revealing) {
+          // From here the canvas paints the navy itself, so cells can fade away one ring at a time.
+          revealing = true;
+          root.classList.add("is-reveal");
+        }
+        const elapsed = T - REVEAL_AT;
+        for (let row = 0; row < rows; row += 1) {
+          for (let col = 0; col < cols; col += 1) {
+            const d = distance(col, row);
+            const progress = Math.min(1, Math.max(0, (elapsed - (d / maxDist) * REVEAL_S * 0.6) / (REVEAL_S * 0.4)));
+            if (progress >= 1) continue;
+            context.fillStyle = `rgba(10,15,28,${1 - progress})`;
+            context.fillRect(col * CELL, row * CELL, CELL, CELL);
+            if (progress > 0) {
+              context.fillStyle = `rgba(${COLORS[(col + row) % 2]},${0.55 * Math.sin(Math.PI * progress)})`;
+              context.fillRect(col * CELL + 1, row * CELL + 1, CELL - 1, CELL - 1);
+            }
+          }
+        }
+        if (elapsed > REVEAL_S + 0.05) return;
+      }
+      frame = requestAnimationFrame(draw);
+    };
+    frame = requestAnimationFrame(draw);
+    return () => cancelAnimationFrame(frame);
+  }, []);
+
   return (
-    <div className="ld-brief">
-      {["Brief.", "Build.", "Launch."].map((word, index) => (
-        <span className="ld-word" key={word} style={{ animationDelay: `${index * 0.34}s` }}>
-          <small>0{index + 1} / 03</small>
-          <b>{word}</b>
-        </span>
-      ))}
-      <span className="ld-trust"><b>Trust.</b></span>
-    </div>
+    <>
+      <div className="ld-grid ld-grid-soft" />
+      <canvas className="ld-canvas" ref={canvasRef} />
+      <div className="ld-brief">
+        {["Brief.", "Build.", "Launch."].map((word, index) => (
+          <span className="ld-word" key={word} style={{ animationDelay: `${index * 0.34}s` }}>
+            <small>0{index + 1} / 03</small>
+            <b>{word}</b>
+          </span>
+        ))}
+        <span className="ld-trust"><b>Trust.</b></span>
+      </div>
+    </>
   );
 }
 

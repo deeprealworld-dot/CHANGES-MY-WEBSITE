@@ -255,21 +255,23 @@ html[data-loader]:not([data-loader-live])::before { background:#0a0f1c; content:
 .ld-switcher a[aria-current="true"] { background:var(--blue); border-color:var(--blue); }
 
 /* 1. Grid Boot */
-.ld-1 { transition:transform .65s cubic-bezier(.76,0,.24,1); }
-.ld-1.is-exit { transform:translateY(-100%); }
-.ld-1::after { background:var(--teal); bottom:0; content:""; height:10px; left:0; position:absolute; width:100%; }
-.ld-1 .ld-grid { animation:ld-scan .55s cubic-bezier(.7,0,.3,1) forwards; background-image:linear-gradient(rgba(20,184,166,.22) 1px,transparent 1px),linear-gradient(90deg,rgba(20,184,166,.22) 1px,transparent 1px); background-size:40px 40px; clip-path:inset(0 100% 0 0); inset:0; position:absolute; }
+.ld-1 { transition:opacity .7s ease; }
+.ld-1.is-exit { opacity:0; }
+.ld-1 .ld-counter, .ld-1 .ld-tl, .ld-1 .ld-tr { transition:opacity .22s ease; }
+.ld-1.is-exit .ld-counter, .ld-1.is-exit .ld-tl, .ld-1.is-exit .ld-tr { opacity:0; }
+.ld-grid { animation:ld-scan .55s cubic-bezier(.7,0,.3,1) forwards; background-image:linear-gradient(rgba(20,184,166,.22) 1px,transparent 1px),linear-gradient(90deg,rgba(20,184,166,.22) 1px,transparent 1px); background-size:40px 40px; clip-path:inset(0 100% 0 0); inset:0; position:absolute; }
 .ld-canvas { height:100%; inset:0; position:absolute; width:100%; }
 .ld-tl,.ld-tr { font-family:"Anton",Impact,sans-serif; font-size:18px; letter-spacing:.04em; position:absolute; text-transform:uppercase; top:28px; }
 .ld-tl { left:32px; }
 .ld-tl i { color:var(--blue); }
 .ld-tr { color:var(--teal); font-size:12px; font-family:"Satoshi",sans-serif; font-weight:900; letter-spacing:.2em; right:32px; top:34px; }
-.ld-counter { bottom:12px; font-family:"Anton",Impact,sans-serif; font-size:clamp(110px,22vw,320px); left:28px; line-height:1; position:absolute; text-shadow:6px 6px 0 var(--blue); }
+.ld-counter { display:grid; font-family:"Anton",Impact,sans-serif; font-size:clamp(120px,26vw,380px); inset:0; line-height:1; place-items:center; pointer-events:none; position:absolute; text-shadow:clamp(5px,.8vw,10px) clamp(5px,.8vw,10px) 0 var(--navy); }
 @keyframes ld-scan { to { clip-path:inset(0 0 0 0); } }
 
 /* 2. The Brief */
-.ld-2 { transition:opacity .45s ease; }
-.ld-2.is-exit { opacity:0; }
+.ld-2.is-reveal { background:transparent; }
+.ld-2.is-reveal .ld-brief, .ld-2.is-reveal .ld-grid { opacity:0; transition:opacity .2s ease; }
+.ld-grid-soft { background-image:linear-gradient(rgba(20,184,166,.14) 1px,transparent 1px),linear-gradient(90deg,rgba(20,184,166,.14) 1px,transparent 1px) !important; }
 .ld-brief { align-items:center; display:flex; inset:0; justify-content:center; position:absolute; }
 .ld-word { animation:ld-word .34s cubic-bezier(.2,.9,.3,1) both; display:grid; justify-items:start; opacity:0; position:absolute; }
 .ld-word small { color:var(--teal); font-size:clamp(11px,1.4vw,16px); font-weight:900; letter-spacing:.2em; margin-bottom:6px; text-transform:uppercase; }
@@ -277,7 +279,7 @@ html[data-loader]:not([data-loader-live])::before { background:#0a0f1c; content:
 .ld-trust { animation:ld-trust .8s cubic-bezier(.7,0,.3,1) 1.02s both; background:var(--blue); box-shadow:10px 10px 0 var(--teal); display:inline-block; opacity:0; padding:0 .12em; position:absolute; transform:rotate(-2deg); }
 .ld-trust b { font-family:"Anton",Impact,sans-serif; font-size:clamp(88px,22vw,360px); font-weight:400; line-height:1.05; text-transform:uppercase; }
 @keyframes ld-word { 0% { opacity:0; transform:translateY(14%) scale(.95); } 1% { opacity:1; transform:translateY(14%) scale(.95); } 30% { opacity:1; transform:none; } 99% { opacity:1; transform:none; } 100% { opacity:0; transform:none; } }
-@keyframes ld-trust { 0% { opacity:0; transform:rotate(-2deg) scale(.7); } 14% { opacity:1; transform:rotate(-2deg) scale(1); } 45% { opacity:1; transform:rotate(-2deg) scale(1); } 100% { opacity:1; transform:rotate(-2deg) scale(16); } }
+@keyframes ld-trust { 0% { opacity:0; transform:rotate(-2deg) scale(.7); } 22% { opacity:1; transform:rotate(-2deg) scale(1.05); } 34%,100% { opacity:1; transform:rotate(-2deg) scale(1); } }
 
 /* 3. Stamp */
 .ld-3 { transition:opacity .5s ease, transform .5s ease; }
