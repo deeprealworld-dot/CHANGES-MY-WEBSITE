@@ -182,10 +182,10 @@ export default function Home() {
 
   return (
     <main className="overflow-hidden bg-white text-[#1f2937]">
-      <header className="fixed inset-x-0 top-0 z-50 flex h-20 items-center justify-between border-b border-[#0f172a]/10 bg-white/90 px-6 backdrop-blur-xl lg:grid lg:grid-cols-[1fr_auto_1fr] lg:px-12">
+      <header className="fixed inset-x-0 top-0 z-50 flex h-20 items-center justify-between border-b border-[#0f172a]/10 bg-white/95 px-6 lg:grid lg:grid-cols-[1fr_auto_1fr] lg:px-12">
         <a className="brand-lockup" href="#top" onClick={closeMenu}>
           <Image alt="" aria-hidden="true" height={34} priority src="/favicon.png" width={34} />
-          <span className="anton text-[23px] tracking-[-.04em] text-[#0f172a]">
+          <span className="anton text-[23px] text-[#0f172a]">
             DEEPWEBSTUDIOS<span className="text-[#2563eb]">.</span>
           </span>
         </a>
@@ -214,17 +214,17 @@ export default function Home() {
         <div className="hero-glow" />
         <HeroSquareTrail />
         <div className="relative z-10 mx-auto max-w-[1250px]">
-          <div className="mb-9 inline-flex items-center gap-2.5 rounded-full border border-[#0f172a]/10 bg-white/90 px-3.5 py-2 text-[10px] font-black uppercase tracking-[.16em] text-[#64748b]">
+          <div className="mb-9 inline-flex items-center gap-2.5 rounded-full border border-[#0f172a]/10 bg-white/90 px-3.5 py-2 text-[10px] font-black uppercase tracking-[.16em] text-[#5b6b82]">
             <span className="status-dot h-2 w-2 rounded-full bg-[#14b8a6]" />Available for new projects
           </div>
-          <h1 className="anton text-[clamp(58px,8.3vw,124px)] leading-[.89] tracking-[-.025em] text-[#0f172a]">
+          <h1 className="anton text-[clamp(48px,8.3vw,124px)] leading-[.98] text-[#0f172a]">
             We build websites<br />that win <span className="highlight">trust</span>
           </h1>
-          <p className="mx-auto mt-11 max-w-3xl text-lg leading-relaxed text-[#64748b] md:text-2xl">
+          <p className="mx-auto mt-11 max-w-3xl text-lg leading-relaxed text-[#5b6b82] md:text-2xl">
             Distinctive, fast websites for ambitious businesses that want to stand out,
             build credibility, and turn more visitors into real inquiries.
           </p>
-          <p className="anton mx-auto mt-6 text-lg tracking-[.04em] text-[#0f172a] md:text-xl">
+          <p className="anton mx-auto mt-6 text-balance text-base tracking-[.04em] text-[#0f172a] md:text-xl">
             Custom design. <span className="text-[#2563eb]">Thoughtful development.</span> Ready-to-launch websites.
           </p>
           <div className="mt-11 flex flex-col items-center justify-center gap-7 sm:flex-row">
@@ -235,12 +235,12 @@ export default function Home() {
       </section>
 
       <div className="ticker overflow-hidden border-y border-white/10 bg-[#0a0f1c] py-7 text-white" ref={tickerRef}>
-        <div className="ticker-track anton text-3xl opacity-30">
+        <div className="ticker-track anton text-3xl opacity-[.42]">
           {[0, 1].map((copy) => (
             <div aria-hidden={copy === 1} className="ticker-group" key={copy}>
               {tickerItems.map((item) => (
                 <span className="ticker-item" key={item}>
-                  <span>{item}</span><i>✦</i>
+                  <span>{item}</span><i aria-hidden="true">✦</i>
                 </span>
               ))}
             </div>
@@ -254,12 +254,12 @@ export default function Home() {
           ["Our standard", "The DeepWeb way", ["A visual system shaped around your business", "Fast, responsive layouts built mobile-first", "Conversion paths designed for calls and inquiries", "A clear scope and a fixed written quote"], true],
         ].map(([label, title, items, accent]) => (
           <article className={`min-h-[620px] px-6 py-24 md:p-20 xl:p-28 ${accent ? "border-t-8 border-[#2563eb] bg-[#0f172a] lg:border-l-8 lg:border-t-0" : "bg-[#0a0f1c]"}`} key={String(title)}>
-            <p className="eyebrow text-[#14b8a6]">{String(label)}</p>
-            <h2 className="anton mt-6 text-[clamp(48px,5vw,76px)] leading-none text-white">{String(title)}</h2>
+            <p className="eyebrow !text-[#14b8a6]">{String(label)}</p>
+            <h2 className="anton mt-6 text-[clamp(44px,4.6vw,70px)] leading-none text-white">{String(title)}</h2>
             <ul className="mt-14 grid gap-7">
               {(items as string[]).map((item) => (
                 <li className={`flex items-start gap-4 text-lg leading-relaxed ${accent ? "font-medium text-white" : "text-white/55"}`} key={item}>
-                  <span className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border ${accent ? "border-[#14b8a6]/30 text-[#14b8a6]" : "border-white/15 text-white/30"}`}>{accent ? "✓" : "×"}</span>{item}
+                  <span className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border ${accent ? "border-[#14b8a6]/30 text-[#14b8a6]" : "border-white/15 text-white/50"}`}>{accent ? "✓" : "×"}</span>{item}
                 </li>
               ))}
             </ul>
@@ -305,11 +305,11 @@ export default function Home() {
                     <div className="work-row-panel-inner">
                     <div className={`project-visual ${visual}`}>
                       {visual === "classes" && <><div className="relative z-10 flex items-center justify-between text-xs font-bold tracking-widest"><b className="text-2xl text-[#f5c94c]">ROYAL</b><span>ABOUT&nbsp;&nbsp; COURSES&nbsp;&nbsp; RESULTS</span></div><div className="relative z-10 mt-24"><small>ADMISSIONS OPEN 2026–27</small><strong>RESULTS THAT<br />SPEAK LOUDER.</strong><i>EXPLORE COURSES →</i></div><div className="result-stamp">96%</div></>}
-                      {visual === "gym" && <><strong className="anton relative z-10 block text-[clamp(50px,5vw,76px)] leading-[.88]">THE FITNESS<br />SQUARE</strong><div className="gym-ring"><span>24/7</span></div><b className="absolute bottom-11 left-10 text-xs tracking-widest text-[#c6ff00]">START TRAINING ↗</b></>}
-                      {visual === "clinic" && <><div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#0d9488] font-black text-white">MC</div><strong className="anton mt-7 block max-w-md text-[clamp(45px,5vw,72px)] leading-[.92]">CARE THAT STARTS<br />WITH LISTENING.</strong><div className="clinic-steps"><span>01<br /><b>Consult</b></span><span>02<br /><b>Treat</b></span><span>03<br /><b>Follow up</b></span></div></>}
-                      {visual === "restaurant" && <><p className="restaurant-kicker">Mumbai dining / 2026</p><strong className="anton relative z-10 block text-[clamp(52px,6vw,86px)] leading-[.86]">GOOD FOOD.<br />BETTER NIGHTS.</strong><div className="restaurant-plate">DINE</div><span className="project-action">Reserve a table ↗</span></>}
-                      {visual === "plus" && <><span className="plus-mark">PLUS</span><strong className="anton relative z-10 mt-16 block text-[clamp(52px,6vw,82px)] leading-[.86]">YOUR FITNESS.<br />YOUR WAY.</strong><div className="plus-stripe" /><span className="project-action">Join Andheri ↗</span></>}
-                      {visual === "studio" && <><span className="studio-label">Mumbai / Independent web studio</span><strong className="anton relative z-10 mt-16 block text-[clamp(55px,6vw,88px)] leading-[.86]">WEBSITES THAT<br /><em>WIN TRUST.</em></strong><div className="studio-grid-mark">D.</div><span className="project-action">Start a project ↗</span></>}
+                      {visual === "gym" && <><strong className="anton relative z-10 block text-[clamp(50px,5vw,76px)] leading-[.98]">THE FITNESS<br />SQUARE</strong><div className="gym-ring"><span>24/7</span></div><b className="absolute bottom-11 left-10 text-xs tracking-widest text-[#c6ff00]">START TRAINING ↗</b></>}
+                      {visual === "clinic" && <><div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#0d9488] font-black text-white">MC</div><strong className="anton mt-7 block max-w-md text-[clamp(45px,5vw,72px)] leading-[.98]">CARE THAT STARTS<br />WITH LISTENING.</strong><div className="clinic-steps"><span>01<br /><b>Consult</b></span><span>02<br /><b>Treat</b></span><span>03<br /><b>Follow up</b></span></div></>}
+                      {visual === "restaurant" && <><p className="restaurant-kicker">Mumbai dining / 2026</p><strong className="anton relative z-10 block text-[clamp(52px,6vw,86px)] leading-[.98]">GOOD FOOD.<br />BETTER NIGHTS.</strong><div className="restaurant-plate">DINE</div><span className="project-action">Reserve a table ↗</span></>}
+                      {visual === "plus" && <><span className="plus-mark">PLUS</span><strong className="anton relative z-10 mt-16 block text-[clamp(52px,6vw,82px)] leading-[.98]">YOUR FITNESS.<br />YOUR WAY.</strong><div className="plus-stripe" /><span className="project-action">Join Andheri ↗</span></>}
+                      {visual === "studio" && <><span className="studio-label">Mumbai / Independent web studio</span><strong className="anton relative z-10 mt-16 block text-[clamp(55px,6vw,88px)] leading-[.98]">WEBSITES THAT<br /><em>WIN TRUST.</em></strong><div className="studio-grid-mark">D.</div><span className="project-action">Start a project ↗</span></>}
                     </div>
                     {caseStudy && (
                       <dl className="case-study">
@@ -346,7 +346,7 @@ export default function Home() {
             </div>
           </article>
           <article className="bento-card bg-[#0f172a] text-white">
-            <span className="micro-label text-white/50">02 / Responsive</span>
+            <span className="micro-label !text-white/60">02 / Responsive</span>
             <div className="service-icon service-icon-blue" aria-hidden="true">
               <svg fill="none" viewBox="0 0 24 24"><rect height="19" rx="2.5" stroke="currentColor" strokeWidth="2" width="12" x="6" y="2.5" /><path d="M9.5 18.5h5" stroke="currentColor" strokeLinecap="round" strokeWidth="2" /></svg>
             </div>
@@ -364,8 +364,8 @@ export default function Home() {
       </section>
 
       <section className="grid gap-16 bg-[#f8fafc] px-6 py-28 lg:grid-cols-[.75fr_1.25fr] lg:gap-28 lg:px-12 lg:py-40" id="process">
-        <div className="h-fit lg:sticky lg:top-36"><p className="eyebrow">Our methodology</p><h2 className="anton mt-6 text-[clamp(72px,8vw,112px)] leading-[.86] tracking-[-.03em] text-[#0f172a]">How it<br />works.</h2><p className="mt-8 max-w-xs leading-relaxed text-[#64748b]">One clear process. No unnecessary complexity.</p></div>
-        <div>{processSteps.map(([number, title, copy]) => <article className="process-step" key={number}><span>{number}</span><div><h3>{title}</h3><p>{copy}</p></div></article>)}</div>
+        <div className="h-fit lg:sticky lg:top-36"><p className="eyebrow">Our methodology</p><h2 className="anton mt-6 text-[clamp(72px,8vw,112px)] leading-[.98] text-[#0f172a]">How it<br />works.</h2><p className="mt-8 max-w-xs leading-relaxed text-[#5b6b82]">One clear process. No unnecessary complexity.</p></div>
+        <div>{processSteps.map(([number, title, copy]) => <article className="process-step" key={number}><span aria-hidden="true">{number}</span><div><h3>{title}</h3><p>{copy}</p></div></article>)}</div>
       </section>
 
       <section className="mx-auto max-w-[1440px] px-6 py-28 lg:px-12 lg:py-40" id="pricing">
@@ -386,10 +386,10 @@ export default function Home() {
       </section>
 
       <section className="bg-[#f8fafc] px-6 py-28 lg:px-12 lg:py-40">
-        <div className="mx-auto max-w-[1312px] text-center"><p className="eyebrow">A better engagement</p><h2 className="anton mt-6 text-[clamp(54px,6vw,88px)] leading-[.92] text-[#0f172a]">Built on clarity,<br />not promises.</h2></div>
+        <div className="mx-auto max-w-[1312px] text-center"><p className="eyebrow">A better engagement</p><h2 className="anton mt-6 text-[clamp(46px,6vw,88px)] leading-[.98] text-[#0f172a]">Built on clarity,<br />not promises.</h2></div>
         <div className="mx-auto mt-16 grid max-w-[1312px] gap-6 md:grid-cols-3">
           {[["01 / See before you commit", "Demo-first", "Start with a focused direction, so you understand the opportunity before a full build begins."], ["02 / No handoffs", "Direct collaboration", "Work with the studio building your site. Feedback stays clear, fast, and close to the result."], ["03 / Clear from day one", "Defined scope", "Deliverables, timeline, and costs are agreed before work starts—no surprise extras."]].map(([label, title, copy], index) => (
-            <article className={`proof-card ${index === 1 ? "bg-[#0f172a] text-white md:translate-y-4" : "bg-white text-[#0f172a]"}`} key={title}><span>{label}</span><h3>{title}</h3><p className={index === 1 ? "text-white/55" : "text-[#64748b]"}>{copy}</p><i>✦</i></article>
+            <article className={`proof-card ${index === 1 ? "bg-[#0f172a] text-white md:translate-y-4" : "bg-white text-[#0f172a]"}`} key={title}><span className={index === 1 ? "!text-[#14b8a6]" : undefined}>{label}</span><h3>{title}</h3><p className={index === 1 ? "text-white/55" : "text-[#5b6b82]"}>{copy}</p><i aria-hidden="true">✦</i></article>
           ))}
         </div>
       </section>
@@ -397,7 +397,7 @@ export default function Home() {
       <section className="contact-section" id="contact">
         <div className="contact-words" aria-hidden="true"><span>READY TO BUILD</span><span>READY TO LAUNCH</span></div>
         <div className="relative z-10 mx-auto grid max-w-[1312px] items-center gap-16 lg:grid-cols-[1fr_.8fr] lg:gap-28">
-          <div><p className="eyebrow !text-white/70">Start the conversation</p><h2 className="anton mt-6 text-[clamp(60px,7vw,102px)] leading-[.88] tracking-[-.025em] text-white">Let&apos;s build a site<br />worth trusting.</h2><p className="mt-9 max-w-xl text-lg leading-relaxed text-white/90">Tell us about your business and submit the form. Your project brief will be delivered directly to our inbox.</p><a className="mt-6 inline-block border-b border-white/50 pb-1 font-black" href="mailto:support@deepwebstudios.com">support@deepwebstudios.com ↗</a></div>
+          <div><p className="eyebrow !text-white">Start the conversation</p><h2 className="anton mt-6 text-[clamp(46px,6.2vw,94px)] leading-[.98] text-white">Let&apos;s build a site<br />worth trusting.</h2><p className="mt-9 max-w-xl text-lg leading-relaxed text-white/90">Tell us about your business and submit the form. Your project brief will be delivered directly to our inbox.</p><a className="mt-6 inline-block border-b border-white/50 pb-1 font-black" href="mailto:support@deepwebstudios.com">support@deepwebstudios.com ↗</a></div>
           <form className="contact-form" onSubmit={sendInquiry}>
             <label><span>Your name</span><input maxLength={80} minLength={2} name="name" placeholder="Enter your name" required /></label>
             <label><span>Business name</span><input maxLength={120} minLength={2} name="business" placeholder="What do you run?" required /></label>
@@ -451,11 +451,11 @@ export default function Home() {
 
       <footer className="bg-[#0a0f1c] text-white">
         <div className="mx-auto grid max-w-[1440px] gap-14 px-6 py-20 md:grid-cols-[2fr_.7fr_.8fr] lg:px-12 lg:py-24">
-          <div><a className="anton text-3xl" href="#top">DEEPWEBSTUDIOS<span className="text-[#2563eb]">.</span></a><p className="mt-7 max-w-md text-lg leading-relaxed text-white/40">Distinctive websites for ambitious businesses, designed and built in Mumbai.</p></div>
+          <div><a className="anton text-3xl" href="#top">DEEPWEBSTUDIOS<span className="text-[#2563eb]">.</span></a><p className="mt-7 max-w-md text-lg leading-relaxed text-white/55">Distinctive websites for ambitious businesses, designed and built in Mumbai.</p></div>
           <div className="footer-column"><span>Explore</span><a href="#work">Work</a><a href="#services">Services</a><a href="#process">Process</a><a href="#pricing">Pricing</a></div>
           <div className="footer-column"><span>Contact</span><a href="mailto:support@deepwebstudios.com">Email the studio</a><p>Based in Mumbai, India. Working with clients worldwide.</p></div>
         </div>
-        <div className="mx-auto flex max-w-[1440px] justify-between border-t border-white/10 px-6 py-8 text-[9px] font-black uppercase tracking-widest text-white/30 lg:px-12"><span>© {new Date().getFullYear()} DeepWebStudios</span><a href="#top">Back to top ↑</a></div>
+        <div className="mx-auto flex max-w-[1440px] justify-between border-t border-white/10 px-6 py-8 text-[9px] font-black uppercase tracking-widest text-white/50 lg:px-12"><span>© {new Date().getFullYear()} DeepWebStudios</span><a href="#top">Back to top ↑</a></div>
       </footer>
     </main>
   );

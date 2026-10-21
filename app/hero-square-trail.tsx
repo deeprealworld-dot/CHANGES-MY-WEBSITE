@@ -27,10 +27,10 @@ export function HeroSquareTrail() {
     let lastPoint: { x: number; y: number } | null = null;
 
     const resize = () => {
-      const scale = Math.min(window.devicePixelRatio || 1, 2);
-      canvas.width = section.clientWidth * scale;
-      canvas.height = section.clientHeight * scale;
-      context.setTransform(scale, 0, 0, scale, 0, 0);
+      // One canvas pixel per CSS pixel: the squares are flat rectangles, so there is nothing to sharpen
+      // and a high-density canvas would only add pixels to clear and upload every frame.
+      canvas.width = section.clientWidth;
+      canvas.height = section.clientHeight;
     };
     resize();
     const observer = new ResizeObserver(resize);
