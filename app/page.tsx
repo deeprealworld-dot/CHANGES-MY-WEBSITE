@@ -5,11 +5,18 @@ import Image from "next/image";
 import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
 import { HeroSquareTrail } from "./hero-square-trail";
 
+type CaseStudy = {
+  objective: string;
+  design: string;
+  implementation: string;
+};
+
 type Project = {
   title: string;
   type: string;
   visual: "classes" | "gym" | "clinic" | "restaurant" | "plus" | "studio";
   url: string;
+  caseStudy?: CaseStudy;
 };
 
 const projects: Project[] = [
@@ -18,18 +25,33 @@ const projects: Project[] = [
     type: "Education / Multi-page experience",
     visual: "classes",
     url: "https://royal-classes-demo.vercel.app/", // TODO_DEMO_URL: Add the deployed Royal Classes URL.
+    caseStudy: {
+      objective: "Show how a coaching institute can explain its courses, results and admissions across several pages while keeping one clear path to enquire.",
+      design: "Deep navy and gold for authority. Results lead the first screen because that is what parents compare first, and the navigation stays short: About, Courses, Results.",
+      implementation: "Multi-page structure with a responsive layout, deployed on Vercel.",
+    },
   },
   {
     title: "The Fitness Square",
     type: "Gym / Lead generation",
     visual: "gym",
     url: "https://modern-gym-website-design-d6swxjjgk.vercel.app/",
+    caseStudy: {
+      objective: "Turn gym browsers into membership enquiries, with the next step always one tap away.",
+      design: "High-contrast black and lime for energy, an oversized name for instant recall, and one repeated call to action: start training.",
+      implementation: "Mobile-first layout built around enquiry-focused calls to action, deployed on Vercel.",
+    },
   },
   {
     title: "Mumbai Care Clinic",
     type: "Clinic / Appointment journey",
     visual: "clinic",
     url: "https://doctors-website-demo.vercel.app/", // TODO_DEMO_URL: Add the deployed clinic demo URL.
+    caseStudy: {
+      objective: "Help patients understand the clinic's services and move to an appointment enquiry without friction.",
+      design: "Calm teal, a large readable headline, and a three-step journey (consult, treat, follow up) that sets expectations before a patient calls.",
+      implementation: "Responsive service-page hierarchy with a clear appointment enquiry path, deployed on Vercel.",
+    },
   },
   {
     title: "Restaurant Demo",
@@ -238,11 +260,11 @@ export default function Home() {
         <div className="mx-auto max-w-[1312px]">
           <div className="section-heading">
             <div><p className="eyebrow">Selected work</p><h2>Built to feel like<br />the business.</h2></div>
-            <p>Purpose-built demo experiences for the exact kinds of local businesses we help. Responsive, focused, and ready to adapt.</p>
+            <p>Purpose-built demo experiences for the kinds of businesses we help. Responsive, focused, and ready to adapt.</p>
           </div>
 
           <div className="work-list">
-            {projects.map(({ title, type, visual, url }, index) => {
+            {projects.map(({ title, type, visual, url, caseStudy }, index) => {
               const open = openProject === index;
               return (
                 <article
@@ -268,7 +290,8 @@ export default function Home() {
                       <span className="demo-link pending" title="Add this project's URL in the projects array before deployment">Live link coming soon</span>
                     )}
                   </div>
-                  <div aria-hidden={!open} className="work-row-panel" id={`work-panel-${index}`}>
+                  <div className="work-row-panel" id={`work-panel-${index}`} inert={!open}>
+                    <div className="work-row-panel-inner">
                     <div className={`project-visual ${visual}`}>
                       {visual === "classes" && <><div className="relative z-10 flex items-center justify-between text-xs font-bold tracking-widest"><b className="text-2xl text-[#f5c94c]">ROYAL</b><span>ABOUT&nbsp;&nbsp; COURSES&nbsp;&nbsp; RESULTS</span></div><div className="relative z-10 mt-24"><small>ADMISSIONS OPEN 2026–27</small><strong>RESULTS THAT<br />SPEAK LOUDER.</strong><i>EXPLORE COURSES →</i></div><div className="result-stamp">96%</div></>}
                       {visual === "gym" && <><strong className="anton relative z-10 block text-[clamp(50px,5vw,76px)] leading-[.88]">THE FITNESS<br />SQUARE</strong><div className="gym-ring"><span>24/7</span></div><b className="absolute bottom-11 left-10 text-xs tracking-widest text-[#c6ff00]">START TRAINING ↗</b></>}
@@ -277,11 +300,24 @@ export default function Home() {
                       {visual === "plus" && <><span className="plus-mark">PLUS</span><strong className="anton relative z-10 mt-16 block text-[clamp(52px,6vw,82px)] leading-[.86]">YOUR FITNESS.<br />YOUR WAY.</strong><div className="plus-stripe" /><span className="project-action">Join Andheri ↗</span></>}
                       {visual === "studio" && <><span className="studio-label">Mumbai / Independent web studio</span><strong className="anton relative z-10 mt-16 block text-[clamp(55px,6vw,88px)] leading-[.86]">WEBSITES THAT<br /><em>WIN TRUST.</em></strong><div className="studio-grid-mark">D.</div><span className="project-action">Start a project ↗</span></>}
                     </div>
+                    {caseStudy && (
+                      <dl className="case-study">
+                        <div><dt>Objective</dt><dd>{caseStudy.objective}</dd></div>
+                        <div><dt>Design decisions</dt><dd>{caseStudy.design}</dd></div>
+                        <div><dt>Implementation</dt><dd>{caseStudy.implementation}</dd></div>
+                        <div>
+                          <dt>Live demo</dt>
+                          <dd>{url ? <a href={url} rel="noreferrer" target="_blank">Open {title} ↗</a> : "Coming soon"}</dd>
+                        </div>
+                      </dl>
+                    )}
+                    </div>
                   </div>
                 </article>
               );
             })}
           </div>
+          <p className="work-note">These are demo projects built to show our approach. Names, figures and results inside them are illustrative, not client results.</p>
         </div>
       </section>
 
