@@ -12,7 +12,6 @@ const allowedNeeds = [
   "Not sure yet",
 ] as const;
 
-const allowedBudgets = ["Not sure yet", "Under $500", "$500 – $1,000", "$1,000 – $2,500", "$2,500+"] as const;
 const allowedTimelines = ["Flexible", "As soon as possible", "Within 1 month", "In 1 – 3 months"] as const;
 
 const contactSchema = z
@@ -51,7 +50,7 @@ const contactSchema = z
         "Enter a valid website address, like yourbusiness.com.",
       )
       .optional(),
-    budget: z.enum(allowedBudgets, "Please choose a budget range.").optional(),
+    budget: z.string().trim().max(60, "Please keep your budget under 60 characters.").optional(),
     timeline: z.enum(allowedTimelines, "Please choose a launch date.").optional(),
     turnstileToken: z
       .string()
@@ -184,7 +183,7 @@ export async function POST(request: Request) {
       ["Country", country],
       ["Time zone", timeZone],
       ["Current website", currentSite],
-      ["Budget range", budget],
+      ["Budget", budget],
       ["Launch date", timeline],
     ];
     const extraDetails: [string, string][] = [];

@@ -75,12 +75,6 @@ const processSteps = [
   ["03", "Launch", "We test, connect your domain, and hand over a website ready to generate genuine inquiries."],
 ];
 
-const packages = [
-  ["Starter", "For solo professionals", "₹5,999", ["Single-page custom build", "WhatsApp-ready lead flow", "Google Maps integration"]],
-  ["Growth", "For growing businesses", "₹9,999", ["Up to five custom pages", "Lead capture system", "Local SEO foundations", "Content editing setup"]],
-  ["Pro", "For ambitious institutions", "₹19,999", ["Custom multi-page system", "Advanced content structure", "Conversion-led user journeys", "Post-launch support"]],
-];
-
 export default function Home() {
   const turnstileSiteKey = (process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "").trim();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -257,7 +251,7 @@ export default function Home() {
       <section className="grid lg:grid-cols-2">
         {[
           ["Traditional approach", "The old way", ["Generic templates that look like every competitor", "Slow pages that lose impatient mobile visitors", "Confusing journeys with no clear next action", "Hidden extras after the project begins"], false],
-          ["Our standard", "The DeepWeb way", ["A visual system shaped around your business", "Fast, responsive layouts built mobile-first", "Conversion paths designed for calls and inquiries", "A clear scope and transparent starting price"], true],
+          ["Our standard", "The DeepWeb way", ["A visual system shaped around your business", "Fast, responsive layouts built mobile-first", "Conversion paths designed for calls and inquiries", "A clear scope and a fixed written quote"], true],
         ].map(([label, title, items, accent]) => (
           <article className={`min-h-[620px] px-6 py-24 md:p-20 xl:p-28 ${accent ? "border-t-8 border-[#2563eb] bg-[#0f172a] lg:border-l-8 lg:border-t-0" : "bg-[#0a0f1c]"}`} key={String(title)}>
             <p className="eyebrow text-[#14b8a6]">{String(label)}</p>
@@ -375,32 +369,19 @@ export default function Home() {
       </section>
 
       <section className="mx-auto max-w-[1440px] px-6 py-28 lg:px-12 lg:py-40" id="pricing">
-        <div className="section-heading"><div><p className="eyebrow">Investment</p><h2>Flat fees.<br />No surprises.</h2></div><p>Clear starting points. Final pricing is confirmed after your project scope is understood.</p></div>
-        <p className="price-market">Packages below are priced in INR for projects in India</p>
-        <div className="grid border border-[#0f172a]/10 lg:grid-cols-3">
-          {packages.map(([name, audience, price, features], index) => (
-            <article className={`price-card ${index === 1 ? "featured" : ""}`} key={String(name)}>
-              {index === 1 && <span className="recommended">Recommended</span>}
-              <h3>{String(name)}</h3><p>{String(audience)}</p><div className="anton mt-10 text-5xl"><small>From</small>{String(price)}</div>
-              <ul>{(features as string[]).map((feature) => <li key={feature}><span>✓</span>{feature}</li>)}</ul>
-              <a href="#contact">{index === 1 ? "Start now" : "Get a quote"} <span>↗</span></a>
-            </article>
-          ))}
-        </div>
-
-        <article className="international-offer">
+        <div className="section-heading"><div><p className="eyebrow">Investment</p><h2>Fixed quotes.<br />No surprises.</h2></div><p>Every project is different, so every project gets its own written quote. No packages to decode, no hidden extras.</p></div>
+        <article className="quote-offer">
           <div>
-            <p className="eyebrow">Clients outside India</p>
-            <h3>Custom quote,<br />in USD.</h3>
-            <p>Every international project is scoped individually, so you pay for the design, development and testing your business actually needs.</p>
+            <p className="eyebrow">For every client</p>
+            <h3>Your project,<br />quoted in writing.</h3>
+            <p>Quoted in INR for projects in India and in USD for everyone else, so you always know what you are agreeing to.</p>
+            <a href="#contact">Request a quote <span>↗</span></a>
           </div>
-          <ul>
-            <li><span>✓</span>Quoted in US dollars after a short scoping conversation</li>
-            <li><span>✓</span>Custom design, development, testing and launch</li>
-            <li><span>✓</span>Hosting, domain, paid third-party services and ongoing support: what is included is written down before work starts</li>
-            <li><span>✓</span>Clear communication across time zones</li>
-          </ul>
-          <a href="#contact">Request a USD quote <span>↗</span></a>
+          <ol>
+            <li><b>01</b><div><h4>Tell us about your project</h4><p>A short form: what you do, what you need and roughly when. It takes a couple of minutes.</p></div></li>
+            <li><b>02</b><div><h4>Get a written quote</h4><p>Scope, timeline and cost for your project: custom design, development, testing and launch.</p></div></li>
+            <li><b>03</b><div><h4>Agree before we start</h4><p>Hosting, domain, paid third-party services and ongoing support: what is included is written down before work begins.</p></div></li>
+          </ol>
         </article>
       </section>
 
@@ -428,7 +409,7 @@ export default function Home() {
             </div>
             <label><span>Current website <i>optional</i></span><input autoCapitalize="none" autoComplete="url" inputMode="url" maxLength={200} name="currentSite" placeholder="yourbusiness.com" /></label>
             <div className="form-row">
-              <label><span>Budget range</span><select defaultValue="Not sure yet" name="budget"><option>Not sure yet</option><option>Under $500</option><option>$500 – $1,000</option><option>$1,000 – $2,500</option><option>$2,500+</option></select></label>
+              <label><span>Budget <i>optional</i></span><input maxLength={60} name="budget" placeholder="e.g. ₹30,000 or $500" /></label>
               <label><span>Launch date</span><select defaultValue="Flexible" name="timeline"><option>Flexible</option><option>As soon as possible</option><option>Within 1 month</option><option>In 1 – 3 months</option></select></label>
             </div>
             <label className="form-honeypot" aria-hidden="true"><span>Website</span><input autoComplete="off" name="website" tabIndex={-1} /></label>
