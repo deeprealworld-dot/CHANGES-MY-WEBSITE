@@ -182,7 +182,7 @@ export default function Home() {
 
   return (
     <main className="overflow-hidden bg-white text-[#1f2937]">
-      <header className="fixed inset-x-0 top-0 z-50 flex h-20 items-center justify-between border-b border-[#0f172a]/10 bg-white/90 px-6 backdrop-blur-xl lg:grid lg:grid-cols-[1fr_auto_1fr] lg:px-12">
+      <header className="fixed inset-x-0 top-0 z-50 flex h-20 items-center justify-between border-b border-[#0f172a]/10 bg-white/95 px-6 lg:grid lg:grid-cols-[1fr_auto_1fr] lg:px-12">
         <a className="brand-lockup" href="#top" onClick={closeMenu}>
           <Image alt="" aria-hidden="true" height={34} priority src="/favicon.png" width={34} />
           <span className="anton text-[23px] text-[#0f172a]">
