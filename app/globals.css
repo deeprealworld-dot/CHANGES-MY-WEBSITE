@@ -155,6 +155,16 @@ button,input,select { font:inherit; }
 .price-card { border-bottom:1px solid rgba(15,23,42,.1); display:flex; flex-direction:column; min-height:590px; padding:clamp(35px,4vw,52px); position:relative; }
 .price-card.featured { background:var(--ink); color:white; }
 .recommended { background:var(--blue); color:white; font-size:9px; font-weight:900; left:50%; letter-spacing:.16em; padding:9px 14px; position:absolute; text-transform:uppercase; top:0; transform:translate(-50%,-50%); }
+.price-market { color:#64748b; font-size:11px; font-weight:900; letter-spacing:.16em; margin:0 0 14px; text-transform:uppercase; }
+.international-offer { align-items:center; background:var(--ink); box-shadow:12px 12px 0 var(--teal); color:white; display:grid; gap:40px; grid-template-columns:1.1fr 1.2fr auto; margin:56px 0 12px; padding:clamp(30px,4vw,56px); }
+.international-offer .eyebrow { color:var(--teal); }
+.international-offer h3 { font-family:"Anton",Impact,sans-serif; font-size:clamp(42px,4.4vw,64px); font-weight:400; line-height:.95; margin:18px 0 18px; text-transform:uppercase; }
+.international-offer > div > p:last-child { color:rgba(255,255,255,.6); font-size:15px; line-height:1.65; margin:0; max-width:420px; }
+.international-offer ul { display:grid; gap:14px; list-style:none; margin:0; padding:0; }
+.international-offer li { align-items:flex-start; color:rgba(255,255,255,.85); display:flex; font-size:14px; gap:10px; line-height:1.5; }
+.international-offer li span { color:var(--teal); }
+.international-offer > a { align-items:center; background:var(--blue); border:2px solid white; color:white; display:inline-flex; font-family:"Anton",Impact,sans-serif; font-size:18px; gap:14px; justify-content:space-between; min-height:60px; padding:0 24px; text-transform:uppercase; transition:background .2s,color .2s; white-space:nowrap; }
+.international-offer > a:hover { background:white; color:var(--ink); }
 .price-card h3 { color:var(--ink); font-family:"Anton",Impact,sans-serif; font-size:42px; font-weight:400; margin:0 0 7px; text-transform:uppercase; }
 .price-card.featured h3 { color:white; }
 .price-card > p { color:#64748b; font-size:14px; margin:0; }
@@ -207,6 +217,7 @@ button,input,select { font:inherit; }
   .design-card,.inquiry-card { grid-column:span 2; }
 }
 @media (max-width:760px) {
+  .international-offer { box-shadow:6px 6px 0 var(--teal); gap:28px; grid-template-columns:1fr; margin-top:44px; }
   .work-list { --work-expanded:420px; }
   .work-row-header { align-items:flex-start; flex-direction:column; gap:0; padding-bottom:12px; }
   .work-row h3 { width:100%; }

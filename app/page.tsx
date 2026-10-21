@@ -359,6 +359,7 @@ export default function Home() {
 
       <section className="mx-auto max-w-[1440px] px-6 py-28 lg:px-12 lg:py-40" id="pricing">
         <div className="section-heading"><div><p className="eyebrow">Investment</p><h2>Flat fees.<br />No surprises.</h2></div><p>Clear starting points. Final pricing is confirmed after your project scope is understood.</p></div>
+        <p className="price-market">Packages below are priced in INR for projects in India</p>
         <div className="grid border border-[#0f172a]/10 lg:grid-cols-3">
           {packages.map(([name, audience, price, features], index) => (
             <article className={`price-card ${index === 1 ? "featured" : ""}`} key={String(name)}>
@@ -369,6 +370,21 @@ export default function Home() {
             </article>
           ))}
         </div>
+
+        <article className="international-offer">
+          <div>
+            <p className="eyebrow">Clients outside India</p>
+            <h3>Custom quote,<br />in USD.</h3>
+            <p>Every international project is scoped individually, so you pay for the design, development and testing your business actually needs.</p>
+          </div>
+          <ul>
+            <li><span>✓</span>Quoted in US dollars after a short scoping conversation</li>
+            <li><span>✓</span>Custom design, development, testing and launch</li>
+            <li><span>✓</span>Hosting, domain, paid third-party services and ongoing support: what is included is written down before work starts</li>
+            <li><span>✓</span>Clear communication across time zones</li>
+          </ul>
+          <a href="#contact">Request a USD quote <span>↗</span></a>
+        </article>
       </section>
 
       <section className="bg-[#f8fafc] px-6 py-28 lg:px-12 lg:py-40">
