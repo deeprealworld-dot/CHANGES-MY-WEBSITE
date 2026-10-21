@@ -28,7 +28,7 @@ const projects: Project[] = [
     caseStudy: {
       objective: "Show how a coaching institute can explain its courses, results and admissions across several pages while keeping one clear path to enquire.",
       design: "Deep navy and gold for authority. Results lead the first screen because that is what parents compare first, and the navigation stays short: About, Courses, Results.",
-      implementation: "Multi-page structure with a responsive layout, deployed on Vercel.",
+      implementation: "Next.js and TypeScript. Nine course pages generated from one template, plus admission, results, testimonials and gallery pages. Admission enquiries open a pre-filled WhatsApp message. Deployed on Vercel.",
     },
   },
   {
@@ -39,7 +39,7 @@ const projects: Project[] = [
     caseStudy: {
       objective: "Turn gym browsers into membership enquiries, with the next step always one tap away.",
       design: "High-contrast black and lime for energy, an oversized name for instant recall, and one repeated call to action: start training.",
-      implementation: "Mobile-first layout built around enquiry-focused calls to action, deployed on Vercel.",
+      implementation: "Next.js 16, React 19 and Tailwind CSS. Membership tiers, trainers, FAQ and a free-pass enquiry section, plus About, Careers and Contact pages. The enquiry form is a front-end prototype in this demo. Deployed on Vercel.",
     },
   },
   {
@@ -48,9 +48,9 @@ const projects: Project[] = [
     visual: "clinic",
     url: "https://doctors-website-demo.vercel.app/", // TODO_DEMO_URL: Add the deployed clinic demo URL.
     caseStudy: {
-      objective: "Help patients understand the clinic's services and move to an appointment enquiry without friction.",
-      design: "Calm teal, a large readable headline, and a three-step journey (consult, treat, follow up) that sets expectations before a patient calls.",
-      implementation: "Responsive service-page hierarchy with a clear appointment enquiry path, deployed on Vercel.",
+      objective: "Help patients, in the language they are comfortable with, understand the clinic's services and move to an appointment request without friction.",
+      design: "Calm teal, a large readable headline, and a three-step journey (consult, treat, follow up) that sets expectations before a patient calls. English, Hindi and Marathi are one tap away.",
+      implementation: "React and Tailwind CSS in English, Hindi and Marathi. A calendar and time-slot appointment form with validation, plus floating WhatsApp and call buttons. The form is a front-end prototype in this demo. Deployed on Vercel.",
     },
   },
   {
