@@ -188,12 +188,15 @@ export default function Home() {
             We build websites<br />that win <span className="highlight">trust</span>
           </h1>
           <p className="mx-auto mt-11 max-w-3xl text-lg leading-relaxed text-[#64748b] md:text-2xl">
-            Distinctive, fast websites for Mumbai businesses that want to look credible,
-            stand apart, and turn more visitors into real inquiries.
+            Distinctive, fast websites for ambitious businesses that want to stand out,
+            build credibility, and turn more visitors into real inquiries.
+          </p>
+          <p className="anton mx-auto mt-6 text-lg tracking-[.04em] text-[#0f172a] md:text-xl">
+            Custom design. <span className="text-[#2563eb]">Thoughtful development.</span> Ready-to-launch websites.
           </p>
           <div className="mt-11 flex flex-col items-center justify-center gap-7 sm:flex-row">
             <a className="primary-cta hero-cta" href="#contact">Start a project <span>↗</span></a>
-            <a className="anton border-b-2 border-[#0f172a] py-2 text-xl text-[#0f172a] transition hover:border-[#2563eb] hover:text-[#2563eb]" href="#work">View our work <span className="font-sans">↓</span></a>
+            <a className="anton border-b-2 border-[#0f172a] py-2 text-xl text-[#0f172a] transition hover:border-[#2563eb] hover:text-[#2563eb]" href="#work">Explore our work <span className="font-sans">↓</span></a>
           </div>
         </div>
       </section>
@@ -389,9 +392,9 @@ export default function Home() {
 
       <footer className="bg-[#0a0f1c] text-white">
         <div className="mx-auto grid max-w-[1440px] gap-14 px-6 py-20 md:grid-cols-[2fr_.7fr_.8fr] lg:px-12 lg:py-24">
-          <div><a className="anton text-3xl" href="#top">DEEPWEBSTUDIOS<span className="text-[#2563eb]">.</span></a><p className="mt-7 max-w-md text-lg leading-relaxed text-white/40">Distinctive websites for Mumbai&apos;s ambitious local businesses.</p></div>
+          <div><a className="anton text-3xl" href="#top">DEEPWEBSTUDIOS<span className="text-[#2563eb]">.</span></a><p className="mt-7 max-w-md text-lg leading-relaxed text-white/40">Distinctive websites for ambitious businesses, designed and built in Mumbai.</p></div>
           <div className="footer-column"><span>Explore</span><a href="#work">Work</a><a href="#services">Services</a><a href="#process">Process</a><a href="#pricing">Pricing</a></div>
-          <div className="footer-column"><span>Contact</span><a href="mailto:support@deepwebstudios.com">Email the studio</a><p>Mumbai, India</p></div>
+          <div className="footer-column"><span>Contact</span><a href="mailto:support@deepwebstudios.com">Email the studio</a><p>Based in Mumbai, India. Working with clients worldwide.</p></div>
         </div>
         <div className="mx-auto flex max-w-[1440px] justify-between border-t border-white/10 px-6 py-8 text-[9px] font-black uppercase tracking-widest text-white/30 lg:px-12"><span>© {new Date().getFullYear()} DeepWebStudios</span><a href="#top">Back to top ↑</a></div>
       </footer>
