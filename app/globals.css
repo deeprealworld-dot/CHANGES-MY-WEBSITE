@@ -243,3 +243,65 @@ h1,h2,h3,h4,.anton { word-spacing:.04em; }
   *,*::before,*::after { animation-duration:.01ms!important; animation-iteration-count:1!important; transition-duration:.01ms!important; }
   .ticker-track { animation-duration:36s!important; animation-iteration-count:infinite!important; }
 }
+
+/* ---------- Loader prototypes (?loader=1..4) ---------- */
+html[data-loader]:not([data-loader-live])::before { background:#0a0f1c; content:""; inset:0; position:fixed; z-index:2147483000; }
+.ld { background:#0a0f1c; color:white; height:100dvh; inset:0; overflow:hidden; position:fixed; width:100%; z-index:2147483000; }
+.ld i { font-style:normal; }
+.ld-switcher { align-items:center; background:var(--navy); border:2px solid white; bottom:16px; box-shadow:5px 5px 0 var(--teal); color:white; display:flex; font-size:11px; font-weight:900; gap:8px; left:16px; letter-spacing:.1em; opacity:0; padding:8px 10px; pointer-events:none; position:fixed; text-transform:uppercase; transition:opacity .3s; z-index:2147483001; }
+.ld-switcher.show { opacity:1; pointer-events:auto; }
+.ld-switcher span { margin-right:6px; }
+.ld-switcher a { border:1px solid rgba(255,255,255,.4); min-width:26px; padding:5px 7px; text-align:center; }
+.ld-switcher a[aria-current="true"] { background:var(--blue); border-color:var(--blue); }
+
+/* 1. Grid Boot */
+.ld-1 { transition:transform .65s cubic-bezier(.76,0,.24,1); }
+.ld-1.is-exit { transform:translateY(-100%); }
+.ld-1::after { background:var(--teal); bottom:0; content:""; height:10px; left:0; position:absolute; width:100%; }
+.ld-1 .ld-grid { animation:ld-scan .55s cubic-bezier(.7,0,.3,1) forwards; background-image:linear-gradient(rgba(20,184,166,.22) 1px,transparent 1px),linear-gradient(90deg,rgba(20,184,166,.22) 1px,transparent 1px); background-size:40px 40px; clip-path:inset(0 100% 0 0); inset:0; position:absolute; }
+.ld-canvas { height:100%; inset:0; position:absolute; width:100%; }
+.ld-tl,.ld-tr { font-family:"Anton",Impact,sans-serif; font-size:18px; letter-spacing:.04em; position:absolute; text-transform:uppercase; top:28px; }
+.ld-tl { left:32px; }
+.ld-tl i { color:var(--blue); }
+.ld-tr { color:var(--teal); font-size:12px; font-family:"Satoshi",sans-serif; font-weight:900; letter-spacing:.2em; right:32px; top:34px; }
+.ld-counter { bottom:12px; font-family:"Anton",Impact,sans-serif; font-size:clamp(110px,22vw,320px); left:28px; line-height:1; position:absolute; text-shadow:6px 6px 0 var(--blue); }
+@keyframes ld-scan { to { clip-path:inset(0 0 0 0); } }
+
+/* 2. The Brief */
+.ld-2 { transition:opacity .45s ease; }
+.ld-2.is-exit { opacity:0; }
+.ld-brief { align-items:center; display:flex; inset:0; justify-content:center; position:absolute; }
+.ld-word { animation:ld-word .34s cubic-bezier(.2,.9,.3,1) both; display:grid; justify-items:start; opacity:0; position:absolute; }
+.ld-word small { color:var(--teal); font-size:clamp(11px,1.4vw,16px); font-weight:900; letter-spacing:.2em; margin-bottom:6px; text-transform:uppercase; }
+.ld-word b { font-family:"Anton",Impact,sans-serif; font-size:clamp(88px,22vw,360px); font-weight:400; line-height:1; text-shadow:clamp(5px,.9vw,12px) clamp(5px,.9vw,12px) 0 var(--blue); text-transform:uppercase; }
+.ld-trust { animation:ld-trust .8s cubic-bezier(.7,0,.3,1) 1.02s both; background:var(--blue); box-shadow:10px 10px 0 var(--teal); display:inline-block; opacity:0; padding:0 .12em; position:absolute; transform:rotate(-2deg); }
+.ld-trust b { font-family:"Anton",Impact,sans-serif; font-size:clamp(88px,22vw,360px); font-weight:400; line-height:1.05; text-transform:uppercase; }
+@keyframes ld-word { 0% { opacity:0; transform:translateY(14%) scale(.95); } 1% { opacity:1; transform:translateY(14%) scale(.95); } 30% { opacity:1; transform:none; } 99% { opacity:1; transform:none; } 100% { opacity:0; transform:none; } }
+@keyframes ld-trust { 0% { opacity:0; transform:rotate(-2deg) scale(.7); } 14% { opacity:1; transform:rotate(-2deg) scale(1); } 45% { opacity:1; transform:rotate(-2deg) scale(1); } 100% { opacity:1; transform:rotate(-2deg) scale(16); } }
+
+/* 3. Stamp */
+.ld-3 { transition:opacity .5s ease, transform .5s ease; }
+.ld-3.is-exit { opacity:0; transform:scale(1.04); }
+.ld-stamp { align-items:center; animation:ld-grow .42s cubic-bezier(.7,0,.3,1) 1.05s forwards; display:grid; gap:28px; inset:0; justify-items:center; align-content:center; position:absolute; transform-origin:50% 42%; }
+.ld-block { animation:ld-drop .5s cubic-bezier(.2,.9,.3,1.25) both; background:var(--blue); box-shadow:clamp(8px,1.4vw,16px) clamp(8px,1.4vw,16px) 0 var(--teal); padding:clamp(18px,3vw,36px) clamp(34px,6vw,84px); }
+.ld-block b { font-family:"Anton",Impact,sans-serif; font-size:clamp(90px,16vw,220px); font-weight:400; line-height:1; }
+.ld-cells { display:grid; gap:6px; grid-template-columns:repeat(10,clamp(18px,3vw,36px)); }
+.ld-cells span { animation:ld-cell .12s steps(1,end) both; aspect-ratio:1; background:transparent; border:2px solid rgba(255,255,255,.3); }
+.ld-stamp p { color:var(--teal); font-size:12px; font-weight:900; letter-spacing:.3em; margin:0; text-transform:uppercase; }
+@keyframes ld-drop { 0% { opacity:0; transform:translateY(-70vh) rotate(-8deg); } 15% { opacity:1; } 100% { opacity:1; transform:none; } }
+@keyframes ld-cell { to { background:var(--teal); border-color:var(--teal); } }
+@keyframes ld-grow { to { opacity:0; transform:scale(14); } }
+
+/* 4. Marquee Curtain */
+.ld-4 { transition:transform .65s cubic-bezier(.76,0,.24,1); }
+.ld-4.is-exit { transform:translateY(-100%); }
+.ld-rows { display:grid; grid-template-rows:repeat(5,1fr); height:100%; }
+.ld-row { align-items:center; animation:ld-slide linear infinite; display:flex; font-family:"Anton",Impact,sans-serif; font-size:clamp(70px,15.5vh,170px); line-height:1; text-transform:uppercase; white-space:nowrap; width:max-content; }
+.ld-row span { display:flex; flex:none; }
+.ld-row em { align-items:center; display:flex; flex:none; font-style:normal; gap:.4em; padding-right:.4em; }
+.ld-row i { color:var(--teal); font-size:.4em; }
+.ld-row[data-style="1"] em { -webkit-text-stroke:2px white; color:transparent; }
+.ld-row[data-style="2"] em { color:var(--blue); }
+.ld-badge { background:var(--blue); box-shadow:8px 8px 0 var(--navy); font-family:"Anton",Impact,sans-serif; font-size:clamp(26px,4vw,52px); left:50%; letter-spacing:.04em; padding:14px 26px; position:absolute; text-transform:uppercase; top:50%; transform:translate(-50%,-50%); }
+.ld-badge i { color:white; }
+@keyframes ld-slide { to { transform:translateX(-50%); } }

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { SiteLoader } from "./site-loader";
 
 export const metadata: Metadata = {
   title: "DeepWebStudios | Websites That Win Trust",
@@ -21,8 +22,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body>{children}</body>
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Marks the page as "loader pending" before first paint so a navy cover hides it until the loader mounts. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              'try{var m=location.search.match(/[?&]loader=([1-4])/);if(m&&!matchMedia("(prefers-reduced-motion: reduce)").matches)document.documentElement.setAttribute("data-loader",m[1])}catch(e){}',
+          }}
+        />
+      </head>
+      <body>
+        <SiteLoader />
+        {children}
+      </body>
     </html>
   );
 }
