@@ -67,6 +67,10 @@ const projects: Project[] = [
   },
 ];
 
+// On phones the case-study details sit behind a button; these are its two labels.
+const ARCHITECT_OPEN = "Meet the architect";
+const ARCHITECT_CLOSE = "Roll up the blueprints";
+
 const tickerItems = ["Restaurants", "Clinics", "Gyms", "Salons", "Coaching classes", "Consultants"];
 
 const processSteps = [
@@ -79,6 +83,12 @@ export default function Home() {
   const turnstileSiteKey = (process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "").trim();
   const [menuOpen, setMenuOpen] = useState(false);
   const [openProject, setOpenProject] = useState(0);
+  const [architectOpen, setArchitectOpen] = useState<number | null>(null);
+  const selectProject = (index: number) => {
+    // Switching rows folds the previous row's architect notes away.
+    if (index !== openProject) setArchitectOpen(null);
+    setOpenProject(index);
+  };
   const [formStatus, setFormStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
   const [formMessage, setFormMessage] = useState("");
   // Kept apart from formMessage so a passing security check only clears its own error.
@@ -283,12 +293,12 @@ export default function Home() {
                   key={title}
                   onPointerEnter={(event) => {
                     // Hover opens rows for mouse users; touch and keyboard use the button below.
-                    if (event.pointerType === "mouse") setOpenProject(index);
+                    if (event.pointerType === "mouse") selectProject(index);
                   }}
                 >
                   <div className="work-row-header">
                     <h3>
-                      <button aria-controls={`work-panel-${index}`} aria-expanded={open} className="work-row-toggle" onClick={() => setOpenProject(index)} type="button">
+                      <button aria-controls={`work-panel-${index}`} aria-expanded={open} className="work-row-toggle" onClick={() => selectProject(index)} type="button">
                         <span className="work-row-index">{String(index + 1).padStart(2, "0")}</span>
                         <span className="demo-tag">Demo</span>
                         <span className="anton work-row-title">{title}</span>
@@ -312,15 +322,26 @@ export default function Home() {
                       {visual === "studio" && <><span className="studio-label">Mumbai / Independent web studio</span><strong className="anton relative z-10 mt-16 block text-[clamp(55px,6vw,88px)] leading-[.98]">WEBSITES THAT<br /><em>WIN TRUST.</em></strong><div className="studio-grid-mark">D.</div><span className="project-action">Start a project ↗</span></>}
                     </div>
                     {caseStudy && (
-                      <dl className="case-study">
-                        <div><dt>Objective</dt><dd>{caseStudy.objective}</dd></div>
-                        <div><dt>Design decisions</dt><dd>{caseStudy.design}</dd></div>
-                        <div><dt>Implementation</dt><dd>{caseStudy.implementation}</dd></div>
-                        <div>
-                          <dt>Live demo</dt>
-                          <dd>{url ? <a href={url} rel="noreferrer" target="_blank">Open {title} ↗</a> : "Coming soon"}</dd>
+                      <div className="case-wrap" data-open={architectOpen === index}>
+                        <button aria-controls={`architect-${index}`} aria-expanded={architectOpen === index} className="architect-btn" onClick={() => setArchitectOpen(architectOpen === index ? null : index)} type="button">
+                          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v18M3 12h18" fill="none" stroke="currentColor" strokeLinecap="square" strokeWidth="2.5" /></svg>
+                          <span>{architectOpen === index ? ARCHITECT_CLOSE : ARCHITECT_OPEN}</span>
+                        </button>
+                        <div className="case-collapse" id={`architect-${index}`}>
+                          <div className="case-collapse-inner">
+                            <p className="architect-eyebrow">The architect&apos;s notes</p>
+                            <dl className="case-study">
+                              <div><dt>Objective</dt><dd>{caseStudy.objective}</dd></div>
+                              <div><dt>Design decisions</dt><dd>{caseStudy.design}</dd></div>
+                              <div><dt>Implementation</dt><dd>{caseStudy.implementation}</dd></div>
+                              <div>
+                                <dt>Live demo</dt>
+                                <dd>{url ? <a href={url} rel="noreferrer" target="_blank">Open {title} ↗</a> : "Coming soon"}</dd>
+                              </div>
+                            </dl>
+                          </div>
                         </div>
-                      </dl>
+                      </div>
                     )}
                     </div>
                   </div>
