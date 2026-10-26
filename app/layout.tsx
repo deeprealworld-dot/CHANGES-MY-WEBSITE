@@ -28,7 +28,7 @@ export default function RootLayout({
         <script
           dangerouslySetInnerHTML={{
             __html:
-              'try{var m=location.search.match(/[?&]loader=([1-4])/);if(m&&!matchMedia("(prefers-reduced-motion: reduce)").matches)document.documentElement.setAttribute("data-loader",m[1])}catch(e){}',
+              'try{var m=location.search.match(/[?&]loader=([1-5])/);if(m&&!matchMedia("(prefers-reduced-motion: reduce)").matches)document.documentElement.setAttribute("data-loader",m[1])}catch(e){}',
           }}
         />
       </head>

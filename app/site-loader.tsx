@@ -5,7 +5,7 @@ import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 // PROTOTYPES: four loading-screen concepts, shown only when the URL has ?loader=1 .. ?loader=4.
 // Without that parameter nothing renders, so this is safe to ship while the choice is open.
 
-type Variant = 1 | 2 | 3 | 4;
+type Variant = 1 | 2 | 3 | 4 | 5;
 
 // The Brief timeline, in seconds.
 const BEAT_S = 0.5; // one beat per word: BRIEF. BUILD. LAUNCH. TRUST.
@@ -16,18 +16,30 @@ const REVEAL_S = 1.3;
 // Unmount only after the reveal has fully finished, so nothing is cut short.
 const BRIEF_RUN_MS = Math.round((REVEAL_AT + REVEAL_S) * 1000) + 250;
 
+// Quiet Editorial timeline, in seconds.
+const QE_WORDS = ["Brief.", "Build.", "Launch.", "Trust."];
+const QE_BEAT_S = 0.62;
+const QE_FIRST_S = 0.3;
+const QE_AT = (index: number) => QE_FIRST_S + index * QE_BEAT_S; // 0.3, 0.92, 1.54, 2.16
+const QE_RULE_AFTER_S = 0.4; // the blue rule starts sweeping once TRUST. has settled
+const QE_RING_S = 2.2; // each hairline ring takes this long to cross the screen
+const QE_REVEAL_AT = 3.35; // after the rule has landed and held for a beat
+const QE_REVEAL_S = 1.0;
+const QE_RUN_MS = Math.round((QE_REVEAL_AT + QE_REVEAL_S) * 1000) + 250;
+
 const VARIANTS: Record<Variant, { name: string; runMs: number; exitMs: number }> = {
   1: { name: "Grid Boot", runMs: 1500, exitMs: 700 },
   2: { name: "The Brief", runMs: BRIEF_RUN_MS, exitMs: 40 },
   3: { name: "Stamp", runMs: 1500, exitMs: 500 },
   4: { name: "Marquee Curtain", runMs: 1400, exitMs: 650 },
+  5: { name: "Quiet Editorial", runMs: QE_RUN_MS, exitMs: 40 },
 };
 // A real loader exits when the page is ready; this caps the wait if fonts are slow.
 const MAX_WAIT_MS = 6000;
 
 const readVariant = (): Variant | null => {
   const value = Number(new URLSearchParams(window.location.search).get("loader"));
-  return value >= 1 && value <= 4 ? (value as Variant) : null;
+  return value >= 1 && value <= 5 ? (value as Variant) : null;
 };
 const prefersReducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const noSubscribe = () => () => {};
@@ -103,11 +115,12 @@ export function SiteLoader() {
           {variant === 2 && <TheBrief />}
           {variant === 3 && <Stamp />}
           {variant === 4 && <MarqueeCurtain />}
+          {variant === 5 && <QuietEditorial />}
         </div>
       )}
       <nav aria-label="Loader prototypes" className={`ld-switcher ${phase === "run" ? "" : "show"}`}>
         <span>Loader {variant}: {VARIANTS[variant].name}</span>
-        {([1, 2, 3, 4] as const).map((n) => (
+        {([1, 2, 3, 4, 5] as const).map((n) => (
           <a aria-current={n === variant ? "true" : undefined} href={`?loader=${n}`} key={n}>{n}</a>
         ))}
         <a href="?">Off</a>
@@ -313,6 +326,131 @@ function MarqueeCurtain() {
         ))}
       </div>
       <span className="ld-badge">DeepWebStudios<i>.</i></span>
+    </>
+  );
+}
+
+/* 5. Quiet Editorial: restrained and slow. Hairline grid with small "+" marks, words that rise out of an
+   invisible line, one hairline ring per beat, a thin blue rule under TRUST., then a circle opens to the page. */
+function QuietEditorial() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const context = canvas?.getContext("2d");
+    const root = canvas?.closest(".ld");
+    if (!canvas || !context || !root) return;
+    const CELL = 40;
+    const width = (canvas.width = document.documentElement.clientWidth);
+    const height = (canvas.height = window.innerHeight);
+    const cx = width / 2;
+    const cy = height / 2;
+    const reach = Math.hypot(cx, cy);
+    const started = performance.now();
+    let frame = 0;
+    let revealing = false;
+
+    const smooth = (x: number) => x * x * (3 - 2 * x);
+    const drawGrid = () => {
+      // Same hairlines as the CSS grid behind everything, so the swap at reveal time is invisible.
+      context.fillStyle = "rgba(20,184,166,0.08)";
+      for (let x = 0; x < width; x += CELL) context.fillRect(x, 0, 1, height);
+      for (let y = 0; y < height; y += CELL) context.fillRect(0, y, width, 1);
+    };
+    const drawMarks = (T: number) => {
+      // A small "+" on every fourth grid intersection, fading in outward from the centre.
+      for (let gx = 0; gx < width; gx += CELL * 4) {
+        for (let gy = 0; gy < height; gy += CELL * 4) {
+          const delay = 0.2 + (Math.hypot(gx - cx, gy - cy) / reach) * 0.9;
+          const alpha = 0.3 * smooth(Math.min(1, Math.max(0, (T - delay) / 0.5)));
+          if (alpha <= 0) continue;
+          context.fillStyle = `rgba(255,255,255,${alpha})`;
+          context.fillRect(gx - 4, gy, 9, 1);
+          context.fillRect(gx, gy - 4, 1, 9);
+        }
+      }
+    };
+
+    const draw = (now: number) => {
+      const T = Math.max(0, (now - started) / 1000);
+      context.clearRect(0, 0, width, height);
+
+      if (T < QE_REVEAL_AT) {
+        drawMarks(T);
+        // One barely-there hairline ring per beat, expanding slowly.
+        QE_WORDS.forEach((_, index) => {
+          const age = (T - QE_AT(index)) / QE_RING_S;
+          if (age < 0 || age > 1) return;
+          const eased = 1 - (1 - age) ** 4;
+          context.beginPath();
+          context.arc(cx, cy, 24 + eased * reach * 0.95, 0, Math.PI * 2);
+          context.lineWidth = 1;
+          context.strokeStyle = `rgba(${index % 2 ? "20,184,166" : "255,255,255"},${0.26 * (1 - age) ** 1.5})`;
+          context.stroke();
+        });
+      } else {
+        if (!revealing) {
+          // From here the canvas paints the navy, grid and marks itself so a circle can be cut out of them.
+          revealing = true;
+          root.classList.add("is-reveal");
+        }
+        const progress = Math.min(1, (T - QE_REVEAL_AT) / QE_REVEAL_S);
+        const eased = progress < 0.5 ? 4 * progress ** 3 : 1 - (-2 * progress + 2) ** 3 / 2;
+        const radius = eased * (reach + 40);
+        context.fillStyle = "#0a0f1c";
+        context.fillRect(0, 0, width, height);
+        drawGrid();
+        drawMarks(99);
+        context.globalCompositeOperation = "destination-out";
+        const hole = context.createRadialGradient(cx, cy, Math.max(0, radius - 26), cx, cy, radius);
+        hole.addColorStop(0, "rgba(0,0,0,1)");
+        hole.addColorStop(1, "rgba(0,0,0,0)");
+        context.fillStyle = hole;
+        context.fillRect(0, 0, width, height);
+        context.globalCompositeOperation = "source-over";
+        if (progress >= 1) {
+          context.clearRect(0, 0, width, height);
+          return;
+        }
+        // A single 1px blue hairline rides the edge of the opening circle.
+        context.beginPath();
+        context.arc(cx, cy, Math.max(0, radius - 13), 0, Math.PI * 2);
+        context.lineWidth = 1;
+        context.strokeStyle = `rgba(37,99,235,${Math.min(1, (1 - progress) * 2.5)})`;
+        context.stroke();
+      }
+      frame = requestAnimationFrame(draw);
+    };
+    frame = requestAnimationFrame(draw);
+    return () => cancelAnimationFrame(frame);
+  }, []);
+
+  return (
+    <>
+      <div className="ld-grid ld-grid-quiet" />
+      <canvas className="ld-canvas" ref={canvasRef} />
+      <div className="ld-qe">
+        <div className="ld-qe-block">
+          <div className="ld-qe-index">
+            {QE_WORDS.slice(0, 3).map((_, index) => (
+              <span key={index} style={{ animationDelay: `${QE_AT(index) + 0.1}s` }}>0{index + 1} / 03</span>
+            ))}
+          </div>
+          <div className="ld-qe-line">
+            {QE_WORDS.map((word, index) => (
+              <span
+                className={`ld-qe-word ${index === 3 ? "is-trust" : ""}`}
+                key={word}
+                style={{ animationDelay: `${QE_AT(index)}s`, ["--rule-delay" as string]: `${QE_AT(index) + QE_RULE_AFTER_S}s` }}
+              >
+                {word}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+      <span className="ld-qe-brand">DeepWebStudios<i>.</i></span>
+      <div className="ld-qe-progress" style={{ ["--progress-s" as string]: `${QE_REVEAL_AT}s` }} />
     </>
   );
 }

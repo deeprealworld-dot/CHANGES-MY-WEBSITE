@@ -308,3 +308,27 @@ html[data-loader]:not([data-loader-live])::before { background:#0a0f1c; content:
 .ld-badge { background:var(--blue); box-shadow:8px 8px 0 var(--navy); font-family:"Anton",Impact,sans-serif; font-size:clamp(26px,4vw,52px); left:50%; letter-spacing:.04em; padding:14px 26px; position:absolute; text-transform:uppercase; top:50%; transform:translate(-50%,-50%); }
 .ld-badge i { color:white; }
 @keyframes ld-slide { to { transform:translateX(-50%); } }
+
+/* 5. Quiet Editorial */
+.ld-5.is-reveal { background:transparent; }
+.ld-5.is-reveal .ld-qe, .ld-5.is-reveal .ld-qe-brand, .ld-5.is-reveal .ld-qe-progress { opacity:0; transition:opacity .35s ease; }
+.ld-5.is-reveal .ld-grid { opacity:0; }
+.ld-5 .ld-grid { animation-duration:1.5s; }
+.ld-grid-quiet { background-image:linear-gradient(rgba(20,184,166,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(20,184,166,.08) 1px,transparent 1px); }
+.ld-qe { display:grid; inset:0; place-items:center; position:absolute; }
+.ld-qe-block { position:relative; text-align:center; }
+.ld-qe-index { height:1em; left:0; position:absolute; right:0; top:-2.6rem; }
+.ld-qe-index span { animation:ld-qe-index 1.1s ease both; color:rgba(255,255,255,.6); font-size:11px; font-weight:700; inset:0; letter-spacing:.34em; opacity:0; position:absolute; text-transform:uppercase; }
+.ld-qe-line { display:grid; font-size:clamp(60px,15vh,170px); justify-items:center; overflow:hidden; padding:.04em .2em .24em; }
+.ld-qe-word { animation:ld-qe-word 1.2s cubic-bezier(.16,1,.3,1) both; display:block; font-family:"Anton",Impact,sans-serif; grid-area:1/1; letter-spacing:.015em; line-height:.98; position:relative; text-transform:uppercase; transform:translateY(135%); }
+.ld-qe-word.is-trust { animation-name:ld-qe-trust; animation-duration:.8s; }
+.ld-qe-word.is-trust::after { animation:ld-qe-rule .75s cubic-bezier(.65,0,.35,1) var(--rule-delay) both; background:var(--blue); bottom:-.1em; content:""; height:3px; left:0; position:absolute; right:0; transform:scaleX(0); transform-origin:left; }
+.ld-qe-brand { bottom:58px; color:rgba(255,255,255,.55); font-family:"Anton",Impact,sans-serif; font-size:13px; left:6vw; letter-spacing:.2em; position:absolute; text-transform:uppercase; }
+.ld-qe-brand i { color:var(--blue); font-style:normal; }
+.ld-qe-progress { background:rgba(255,255,255,.14); bottom:44px; height:1px; left:6vw; position:absolute; right:6vw; }
+.ld-qe-progress::after { animation:ld-qe-progress var(--progress-s) cubic-bezier(.45,0,.25,1) both; background:rgba(255,255,255,.75); content:""; inset:0; position:absolute; transform:scaleX(0); transform-origin:left; }
+@keyframes ld-qe-word { 0% { transform:translateY(135%); } 50% { transform:translateY(0); } 58% { transform:translateY(0); } 100% { transform:translateY(-125%); } }
+@keyframes ld-qe-trust { from { transform:translateY(135%); } to { transform:translateY(0); } }
+@keyframes ld-qe-rule { to { transform:scaleX(1); } }
+@keyframes ld-qe-index { 0% { opacity:0; transform:translateY(6px); } 20% { opacity:1; transform:none; } 55% { opacity:1; } 75%,100% { opacity:0; } }
+@keyframes ld-qe-progress { to { transform:scaleX(1); } }
