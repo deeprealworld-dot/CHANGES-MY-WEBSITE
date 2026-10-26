@@ -24,11 +24,13 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* Marks the page as "loader pending" before first paint so a navy cover hides it until the loader mounts. */}
+        {/* Decides before first paint whether this visit gets the intro: the first visit in this browser
+            session, and not for visitors who prefer reduced motion. If sessionStorage is unavailable, the
+            intro is skipped. The navy cover this enables releases itself after 5s if the intro never starts. */}
         <script
           dangerouslySetInnerHTML={{
             __html:
-              'try{var m=location.search.match(/[?&]loader=([1-5])/);if(m&&!matchMedia("(prefers-reduced-motion: reduce)").matches)document.documentElement.setAttribute("data-loader",m[1])}catch(e){}',
+              'try{if(!matchMedia("(prefers-reduced-motion: reduce)").matches&&!sessionStorage.getItem("dws-intro-seen")){sessionStorage.setItem("dws-intro-seen","1");document.documentElement.setAttribute("data-loader","")}}catch(e){}',
           }}
         />
       </head>
