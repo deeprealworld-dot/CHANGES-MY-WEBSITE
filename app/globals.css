@@ -61,8 +61,17 @@ h1,h2,h3,h4,.anton { word-spacing:.04em; }
 .demo-tag { background:var(--teal); border-radius:999px; color:#0a0f1c; font-size:9px; font-weight:900; letter-spacing:.12em; padding:4px 10px; text-transform:uppercase; }
 .work-row-title { font-size:clamp(30px,3.4vw,46px); line-height:1; transition:color .3s ease; }
 .work-row.open .work-row-title { color:var(--blue); }
-.architect-btn, .architect-eyebrow { display:none; }
-.case-study { background:white; border:2px solid var(--navy); display:grid; gap:0; grid-template-columns:repeat(4,1fr); margin:0 0 28px; }
+.case-wrap { padding:22px 0 26px; }
+.architect-btn { align-items:center; background:white; border:2px solid var(--navy); box-shadow:5px 5px 0 var(--teal); color:var(--ink); cursor:pointer; display:inline-flex; font-family:"Anton",Impact,sans-serif; font-size:18px; gap:12px; letter-spacing:.03em; min-height:52px; padding:0 20px 0 16px; text-transform:uppercase; transition:box-shadow .15s ease, transform .15s ease; }
+.architect-btn:active { box-shadow:2px 2px 0 var(--teal); transform:translate(3px,3px); }
+.architect-btn:focus-visible { outline:2px solid var(--blue); outline-offset:4px; }
+.architect-btn svg { color:var(--blue); flex:none; height:20px; transition:transform .35s cubic-bezier(.22,1,.36,1); width:20px; }
+.case-wrap[data-open="true"] .architect-btn svg { transform:rotate(45deg); }
+.case-collapse { display:grid; grid-template-rows:0fr; transition:grid-template-rows .5s cubic-bezier(.22,1,.36,1), visibility 0s .5s; visibility:hidden; }
+.case-wrap[data-open="true"] .case-collapse { grid-template-rows:1fr; transition:grid-template-rows .5s cubic-bezier(.22,1,.36,1), visibility 0s; visibility:visible; }
+.case-collapse-inner { min-height:0; overflow:hidden; }
+.architect-eyebrow { color:var(--blue); display:block; font-size:10px; font-weight:900; letter-spacing:.2em; margin:22px 0 12px; text-transform:uppercase; }
+.case-study { background:white; border:2px dashed var(--navy); display:grid; gap:0; grid-template-columns:repeat(4,1fr); margin:0; }
 .case-study > div { border-right:1px solid rgba(15,23,42,.12); padding:24px 26px 28px; }
 .case-study > div:last-child { border-right:0; }
 .case-study dt { color:var(--blue); font-size:9px; font-weight:900; letter-spacing:.16em; margin-bottom:12px; text-transform:uppercase; }
@@ -214,17 +223,7 @@ h1,h2,h3,h4,.anton { word-spacing:.04em; }
   .work-row-toggle { flex-wrap:wrap; gap:10px 12px; min-height:0; padding:22px 0 6px; }
   .work-row-index { display:none; }
   .work-row-type { flex-basis:100%; margin-left:0; text-align:left; }
-  .case-study { border-style:dashed; grid-template-columns:1fr; margin-bottom:0; }
-  .case-wrap { padding:22px 0 26px; }
-  .architect-btn { align-items:center; background:white; border:2px solid var(--navy); box-shadow:5px 5px 0 var(--teal); color:var(--ink); cursor:pointer; display:inline-flex; font-family:"Anton",Impact,sans-serif; font-size:18px; gap:12px; letter-spacing:.03em; min-height:52px; padding:0 20px 0 16px; text-transform:uppercase; transition:box-shadow .15s ease, transform .15s ease; }
-  .architect-btn:active { box-shadow:2px 2px 0 var(--teal); transform:translate(3px,3px); }
-  .architect-btn:focus-visible { outline:2px solid var(--blue); outline-offset:4px; }
-  .architect-btn svg { color:var(--blue); flex:none; height:20px; transition:transform .35s cubic-bezier(.22,1,.36,1); width:20px; }
-  .case-wrap[data-open="true"] .architect-btn svg { transform:rotate(45deg); }
-  .case-collapse { display:grid; grid-template-rows:0fr; transition:grid-template-rows .5s cubic-bezier(.22,1,.36,1), visibility 0s .5s; visibility:hidden; }
-  .case-wrap[data-open="true"] .case-collapse { grid-template-rows:1fr; transition:grid-template-rows .5s cubic-bezier(.22,1,.36,1), visibility 0s; visibility:visible; }
-  .case-collapse-inner { min-height:0; overflow:hidden; }
-  .architect-eyebrow { color:var(--blue); display:block; font-size:10px; font-weight:900; letter-spacing:.2em; margin:22px 0 12px; text-transform:uppercase; }
+  .case-study { grid-template-columns:1fr; }
   .case-study > div { border-bottom:1px solid rgba(15,23,42,.12); border-right:0; }
   .case-study > div:last-child { border-bottom:0; }
   html { scroll-padding-top:70px; }
