@@ -3,6 +3,7 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
+import { About, Faq } from "./about-faq";
 import { HeroSquareTrail } from "./hero-square-trail";
 
 type CaseStudy = {
@@ -202,11 +203,11 @@ export default function Home() {
 
         <nav
           aria-label="Primary navigation"
-          className={`absolute left-0 right-0 top-20 flex flex-col border-b border-[#0f172a]/10 bg-white p-6 transition-all lg:static lg:flex lg:flex-row lg:items-center lg:gap-10 lg:border-0 lg:bg-transparent lg:p-0 ${
+          className={`absolute left-0 right-0 top-20 flex flex-col border-b border-[#0f172a]/10 bg-white p-6 transition-all lg:static lg:flex lg:flex-row lg:items-center lg:gap-6 xl:gap-10 lg:border-0 lg:bg-transparent lg:p-0 ${
             menuOpen ? "translate-y-0 opacity-100" : "pointer-events-none -translate-y-3 opacity-0 max-lg:invisible lg:pointer-events-auto lg:translate-y-0 lg:opacity-100"
           }`}
         >
-          {[["Work", "#work"], ["Services", "#services"], ["Process", "#process"], ["Pricing", "#pricing"]].map(([label, href]) => (
+          {[["Work", "#work"], ["Services", "#services"], ["Process", "#process"], ["About", "#about"], ["Pricing", "#pricing"], ["FAQ", "#faq"]].map(([label, href]) => (
             <a className="border-b border-[#0f172a]/10 py-4 text-xs font-black uppercase tracking-[.14em] transition-colors hover:text-[#2563eb] lg:border-0 lg:py-0" href={href} key={label} onClick={closeMenu}>
               {label}
             </a>
@@ -389,6 +390,8 @@ export default function Home() {
         <div>{processSteps.map(([number, title, copy]) => <article className="process-step" key={number}><span aria-hidden="true">{number}</span><div><h3>{title}</h3><p>{copy}</p></div></article>)}</div>
       </section>
 
+      <About />
+
       <section className="mx-auto max-w-[1440px] px-6 py-28 lg:px-12 lg:py-40" id="pricing">
         <div className="section-heading"><div><p className="eyebrow">Investment</p><h2>Fixed quotes.<br />No surprises.</h2></div><p>Every project is different, so every project gets its own written quote. No packages to decode, no hidden extras.</p></div>
         <article className="quote-offer">
@@ -405,6 +408,8 @@ export default function Home() {
           </ol>
         </article>
       </section>
+
+      <Faq />
 
       <section className="bg-[#f8fafc] px-6 py-28 lg:px-12 lg:py-40">
         <div className="mx-auto max-w-[1312px] text-center"><p className="eyebrow">A better engagement</p><h2 className="anton mt-6 text-[clamp(46px,6vw,88px)] leading-[.98] text-[#0f172a]">Built on clarity,<br />not promises.</h2></div>
@@ -473,7 +478,7 @@ export default function Home() {
       <footer className="bg-[#0a0f1c] text-white">
         <div className="mx-auto grid max-w-[1440px] gap-14 px-6 py-20 md:grid-cols-[2fr_.7fr_.8fr] lg:px-12 lg:py-24">
           <div><a className="anton text-3xl" href="#top">DEEPWEBSTUDIOS<span className="text-[#2563eb]">.</span></a><p className="mt-7 max-w-md text-lg leading-relaxed text-white/55">Distinctive websites for ambitious businesses, designed and built in Mumbai.</p></div>
-          <div className="footer-column"><span>Explore</span><a href="#work">Work</a><a href="#services">Services</a><a href="#process">Process</a><a href="#pricing">Pricing</a></div>
+          <div className="footer-column"><span>Explore</span><a href="#work">Work</a><a href="#services">Services</a><a href="#process">Process</a><a href="#about">About</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a></div>
           <div className="footer-column"><span>Contact</span><a href="mailto:support@deepwebstudios.com">Email the studio</a><p>Based in Mumbai, India. Working with clients worldwide.</p></div>
         </div>
         <div className="mx-auto flex max-w-[1440px] justify-between border-t border-white/10 px-6 py-8 text-[9px] font-black uppercase tracking-widest text-white/50 lg:px-12"><span>© {new Date().getFullYear()} DeepWebStudios</span><a href="#top">Back to top ↑</a></div>
