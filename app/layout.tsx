@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { Motion } from "./motion";
 import { SiteLoader } from "./site-loader";
 
 export const metadata: Metadata = {
@@ -36,6 +37,7 @@ export default function RootLayout({
       </head>
       <body>
         <SiteLoader />
+        <Motion />
         {children}
       </body>
     </html>

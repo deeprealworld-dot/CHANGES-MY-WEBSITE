@@ -53,12 +53,14 @@ export function SiteLoader() {
     const cleanup = () => {
       root.removeAttribute("data-loader");
       root.removeAttribute("data-loader-live");
+      root.removeAttribute("data-lifting");
       window.removeEventListener("wheel", blockScroll);
       window.removeEventListener("touchmove", blockScroll);
     };
     const end = (wasSkipped: boolean) => {
       if (ending) return;
       ending = true;
+      root.setAttribute("data-lifting", "");
       setSkipped(wasSkipped);
       setPhase("exit");
       timers.push(
@@ -73,7 +75,13 @@ export function SiteLoader() {
     };
     const skip = () => end(true);
 
-    timers.push(window.setTimeout(() => setLifting(true), LIFT_AT_S * 1000));
+    timers.push(
+      window.setTimeout(() => {
+        // Tells the hero to start its entrance as the curtain begins to rise.
+        root.setAttribute("data-lifting", "");
+        setLifting(true);
+      }, LIFT_AT_S * 1000),
+    );
     timers.push(window.setTimeout(() => ((minElapsed = true), check()), RUN_MS));
     timers.push(window.setTimeout(() => end(false), MAX_WAIT_MS));
     document.fonts.ready.then(() => ((fontsReady = true), check()));

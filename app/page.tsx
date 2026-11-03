@@ -72,6 +72,9 @@ const projects: Project[] = [
 const ARCHITECT_OPEN = "Meet the architect";
 const ARCHITECT_CLOSE = "Roll up the blueprints";
 
+// Start delay for the hero's entrance animation, read by ".hero-item" in globals.css.
+const delay = (ms: number) => ({ "--d": `${ms}ms` }) as React.CSSProperties;
+
 const tickerItems = ["Restaurants", "Clinics", "Gyms", "Salons", "Coaching classes", "Consultants"];
 
 const processSteps = [
@@ -193,7 +196,7 @@ export default function Home() {
 
   return (
     <main className="overflow-hidden bg-white text-[#1f2937]">
-      <header className="fixed inset-x-0 top-0 z-50 flex h-20 items-center justify-between border-b border-[#0f172a]/10 bg-white/95 px-6 lg:grid lg:grid-cols-[1fr_auto_1fr] lg:px-12">
+      <header className="site-header fixed inset-x-0 top-0 z-50 flex h-20 items-center justify-between border-b border-[#0f172a]/10 bg-white px-6 lg:grid lg:grid-cols-[1fr_auto_1fr] lg:px-12">
         <a className="brand-lockup" href="#top" onClick={closeMenu}>
           <Image alt="" aria-hidden="true" height={34} priority src="/favicon.png" width={34} />
           <span className="anton text-[23px] text-[#0f172a]">
@@ -208,7 +211,7 @@ export default function Home() {
           }`}
         >
           {[["Work", "#work"], ["Services", "#services"], ["Process", "#process"], ["About", "#about"], ["Pricing", "#pricing"], ["FAQ", "#faq"]].map(([label, href]) => (
-            <a className="border-b border-[#0f172a]/10 py-4 text-xs font-black uppercase tracking-[.14em] transition-colors hover:text-[#2563eb] lg:border-0 lg:py-0" href={href} key={label} onClick={closeMenu}>
+            <a className="nav-link border-b border-[#0f172a]/10 py-4 text-xs font-black uppercase tracking-[.14em] transition-colors hover:text-[#2563eb] lg:border-0 lg:py-0" href={href} key={label} onClick={closeMenu}>
               {label}
             </a>
           ))}
@@ -225,20 +228,21 @@ export default function Home() {
         <div className="hero-glow" />
         <HeroSquareTrail />
         <div className="relative z-10 mx-auto max-w-[1250px]">
-          <div className="mb-9 inline-flex items-center gap-2.5 rounded-full border border-[#0f172a]/10 bg-white/90 px-3.5 py-2 text-[10px] font-black uppercase tracking-[.16em] text-[#5b6b82]">
+          <div style={delay(0)} className="hero-item mb-9 inline-flex items-center gap-2.5 rounded-full border border-[#0f172a]/10 bg-white/90 px-3.5 py-2 text-[10px] font-black uppercase tracking-[.16em] text-[#5b6b82]">
             <span className="status-dot h-2 w-2 rounded-full bg-[#14b8a6]" />Available for new projects
           </div>
           <h1 className="anton text-[clamp(48px,8.3vw,124px)] leading-[.98] text-[#0f172a]">
-            We build websites<br />that win <span className="highlight">trust</span>
+            <span className="hero-item block" style={delay(120)}>We build websites</span>{" "}
+            <span className="hero-item block" style={delay(240)}>that win <span className="highlight">trust</span></span>
           </h1>
-          <p className="mx-auto mt-11 max-w-3xl text-lg leading-relaxed text-[#5b6b82] md:text-2xl">
+          <p style={delay(380)} className="hero-item mx-auto mt-11 max-w-3xl text-lg leading-relaxed text-[#5b6b82] md:text-2xl">
             Distinctive, fast websites for ambitious businesses that want to stand out,
             build credibility, and turn more visitors into real inquiries.
           </p>
-          <p className="anton mx-auto mt-6 text-balance text-base tracking-[.04em] text-[#0f172a] md:text-xl">
+          <p style={delay(480)} className="hero-item anton mx-auto mt-6 text-balance text-base tracking-[.04em] text-[#0f172a] md:text-xl">
             Custom design. <span className="text-[#2563eb]">Thoughtful development.</span> Ready-to-launch websites.
           </p>
-          <div className="mt-11 flex flex-col items-center justify-center gap-7 sm:flex-row">
+          <div style={delay(600)} className="hero-item mt-11 flex flex-col items-center justify-center gap-7 sm:flex-row">
             <a className="primary-cta hero-cta" href="#contact">Start a project <span>↗</span></a>
             <a className="anton border-b-2 border-[#0f172a] py-2 text-xl text-[#0f172a] transition hover:border-[#2563eb] hover:text-[#2563eb]" href="#work">Explore our work <span className="font-sans">↓</span></a>
           </div>
@@ -412,7 +416,7 @@ export default function Home() {
       <Faq />
 
       <section className="bg-[#f8fafc] px-6 py-28 lg:px-12 lg:py-40">
-        <div className="mx-auto max-w-[1312px] text-center"><p className="eyebrow">A better engagement</p><h2 className="anton mt-6 text-[clamp(46px,6vw,88px)] leading-[.98] text-[#0f172a]">Built on clarity,<br />not promises.</h2></div>
+        <div className="mx-auto max-w-[1312px] text-center" data-reveal=""><p className="eyebrow">A better engagement</p><h2 className="anton mt-6 text-[clamp(46px,6vw,88px)] leading-[.98] text-[#0f172a]">Built on clarity,<br />not promises.</h2></div>
         <div className="mx-auto mt-16 grid max-w-[1312px] gap-6 md:grid-cols-3">
           {[["01 / See before you commit", "Demo-first", "Start with a focused direction, so you understand the opportunity before a full build begins."], ["02 / No handoffs", "Direct collaboration", "Work with the studio building your site. Feedback stays clear, fast, and close to the result."], ["03 / Clear from day one", "Defined scope", "Deliverables, timeline, and costs are agreed before work starts—no surprise extras."]].map(([label, title, copy], index) => (
             <article className={`proof-card ${index === 1 ? "bg-[#0f172a] text-white md:translate-y-4" : "bg-white text-[#0f172a]"}`} key={title}><span className={index === 1 ? "!text-[#14b8a6]" : undefined}>{label}</span><h3>{title}</h3><p className={index === 1 ? "text-white/55" : "text-[#5b6b82]"}>{copy}</p><i aria-hidden="true">✦</i></article>
@@ -423,7 +427,7 @@ export default function Home() {
       <section className="contact-section" id="contact">
         <div className="contact-words" aria-hidden="true"><span>READY TO BUILD</span><span>READY TO LAUNCH</span></div>
         <div className="relative z-10 mx-auto grid max-w-[1312px] items-center gap-16 lg:grid-cols-[1fr_.8fr] lg:gap-28">
-          <div><p className="eyebrow !text-white">Start the conversation</p><h2 className="anton mt-6 text-[clamp(46px,6.2vw,94px)] leading-[.98] text-white">Let&apos;s build a site<br />worth trusting.</h2><p className="mt-9 max-w-xl text-lg leading-relaxed text-white/90">Tell us about your business and submit the form. Your project brief will be delivered directly to our inbox.</p><a className="mt-6 inline-block border-b border-white/50 pb-1 font-black" href="mailto:support@deepwebstudios.com">support@deepwebstudios.com ↗</a></div>
+          <div className="contact-copy"><p className="eyebrow !text-white">Start the conversation</p><h2 className="anton mt-6 text-[clamp(46px,6.2vw,94px)] leading-[.98] text-white">Let&apos;s build a site<br />worth trusting.</h2><p className="mt-9 max-w-xl text-lg leading-relaxed text-white/90">Tell us about your business and submit the form. Your project brief will be delivered directly to our inbox.</p><a className="mt-6 inline-block border-b border-white/50 pb-1 font-black" href="mailto:support@deepwebstudios.com">support@deepwebstudios.com ↗</a></div>
           <form className="contact-form" onSubmit={sendInquiry}>
             <label><span>Your name</span><input maxLength={80} minLength={2} name="name" placeholder="Enter your name" required /></label>
             <label><span>Business name</span><input maxLength={120} minLength={2} name="business" placeholder="What do you run?" required /></label>
@@ -477,7 +481,7 @@ export default function Home() {
 
       <footer className="bg-[#0a0f1c] text-white">
         <div className="mx-auto grid max-w-[1440px] gap-14 px-6 py-20 md:grid-cols-[2fr_.7fr_.8fr] lg:px-12 lg:py-24">
-          <div><a className="anton text-3xl" href="#top">DEEPWEBSTUDIOS<span className="text-[#2563eb]">.</span></a><p className="mt-7 max-w-md text-lg leading-relaxed text-white/55">Distinctive websites for ambitious businesses, designed and built in Mumbai.</p></div>
+          <div className="footer-brand"><a className="anton text-3xl" href="#top">DEEPWEBSTUDIOS<span className="text-[#2563eb]">.</span></a><p className="mt-7 max-w-md text-lg leading-relaxed text-white/55">Distinctive websites for ambitious businesses, designed and built in Mumbai.</p></div>
           <div className="footer-column"><span>Explore</span><a href="#work">Work</a><a href="#services">Services</a><a href="#process">Process</a><a href="#about">About</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a></div>
           <div className="footer-column"><span>Contact</span><a href="mailto:support@deepwebstudios.com">Email the studio</a><p>Based in Mumbai, India. Working with clients worldwide.</p></div>
         </div>
